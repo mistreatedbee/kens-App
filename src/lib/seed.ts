@@ -4,8 +4,8 @@ import { Category, Product, StoreSettings } from '../context/StoreContext';
 export const defaultSettings: StoreSettings = {
   storeName: "Kens App",
   logo: '/logo.svg',
-  whatsappNumber: '+1234567890',
-  phoneNumber: '+1234567890',
+  whatsappNumber: '073 204 7642',
+  phoneNumber: '073 204 7642',
   email: 'hello@kensapp.com',
   address: '123 Design Avenue, Creative District',
   socialLinks: {
