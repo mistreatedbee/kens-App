@@ -3,7 +3,7 @@ import { Category, Product, StoreSettings } from '../context/StoreContext';
 
 export const defaultSettings: StoreSettings = {
   storeName: "Kens App",
-  logo: '',
+  logo: '/logo.svg',
   whatsappNumber: '+1234567890',
   phoneNumber: '+1234567890',
   email: 'hello@kensapp.com',
