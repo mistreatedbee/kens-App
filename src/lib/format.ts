@@ -1,11 +1,14 @@
-export function formatCurrency(amount: number, currency = '$') {
-  return new Intl.NumberFormat('en-US', {
+export function formatCurrency(amount: number, currency = 'R') {
+  // Always format using South African Rand when currency is 'R',
+  // otherwise fall back to provided currency code.
+  const currencyCode = currency === 'R' || currency === 'R-' ? 'ZAR' : currency;
+  const locale = currencyCode === 'ZAR' ? 'en-ZA' : 'en-US';
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: currency === '$' ? 'USD' : 'ZAR',
+    currency: currencyCode,
+    currencyDisplay: 'symbol',
     minimumFractionDigits: 2
-  }).
-  format(amount).
-  replace(/[A-Z]{3}\s?/, currency);
+  }).format(amount);
 }
 
 export function formatDate(dateString: string) {

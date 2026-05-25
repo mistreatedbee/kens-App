@@ -1,5 +1,6 @@
 {
-  "name": "magic-patterns-vite-template",
+  "name": "kens-app",
+  "description": "Kens App e-commerce starter",
   "version": "0.0.1",
   "private": true,
   "type": "module",

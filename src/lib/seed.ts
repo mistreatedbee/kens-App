@@ -2,20 +2,20 @@ import { generateId } from './id';
 import { Category, Product, StoreSettings } from '../context/StoreContext';
 
 export const defaultSettings: StoreSettings = {
-  storeName: 'Aura Premium',
+  storeName: "Kens App",
   logo: '',
   whatsappNumber: '+1234567890',
   phoneNumber: '+1234567890',
-  email: 'hello@aurapremium.com',
+  email: 'hello@kensapp.com',
   address: '123 Design Avenue, Creative District',
   socialLinks: {
     instagram: 'https://instagram.com',
     facebook: 'https://facebook.com'
   },
   deliveryInfo:
-  'Free delivery on orders over $150. Standard delivery takes 3-5 business days.',
-  footerText: '© 2026 Aura Premium. All rights reserved.',
-  currency: '$'
+  'Free delivery on orders over R150. Standard delivery takes 3-5 business days.',
+  footerText: '© 2026 Kens App. All rights reserved.',
+  currency: 'R'
 };
 
 export const seedCategories: Category[] = [
