@@ -1,5 +1,8 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
+import { toast } from 'sonner';
 import { defaultSettings, seedCategories, seedProducts } from '../lib/seed';
+import { api } from '../lib/api';
+
 export interface Product {
   id: string;
   name: string;
@@ -17,6 +20,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
+
 export interface Category {
   id: string;
   name: string;
@@ -27,6 +31,7 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
+
 export interface OrderItem {
   productId: string;
   name: string;
@@ -34,6 +39,7 @@ export interface OrderItem {
   quantity: number;
   image: string;
 }
+
 export interface Order {
   id: string;
   orderNumber: string;
@@ -47,17 +53,18 @@ export interface Order {
   subtotal: number;
   total: number;
   status:
-  'New' |
-  'Pending' |
-  'Confirmed' |
-  'Processing' |
-  'Ready for collection' |
-  'Out for delivery' |
-  'Completed' |
-  'Cancelled';
+    | 'New'
+    | 'Pending'
+    | 'Confirmed'
+    | 'Processing'
+    | 'Ready for collection'
+    | 'Out for delivery'
+    | 'Completed'
+    | 'Cancelled';
   createdAt: string;
   updatedAt: string;
 }
+
 export interface StoreSettings {
   storeName: string;
   logo: string;
@@ -74,136 +81,140 @@ export interface StoreSettings {
   footerText: string;
   currency: string;
 }
+
 interface StoreContextType {
   products: Product[];
   categories: Category[];
   orders: Order[];
   settings: StoreSettings;
+  loading: boolean;
   addProduct: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateProduct: (id: string, product: Partial<Product>) => void;
   deleteProduct: (id: string) => void;
-  addCategory: (
-  category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>)
-  => void;
+  addCategory: (category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateCategory: (id: string, category: Partial<Category>) => void;
   deleteCategory: (id: string) => void;
   addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateOrderStatus: (id: string, status: Order['status']) => void;
   updateSettings: (settings: Partial<StoreSettings>) => void;
 }
+
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
-export function StoreProvider({ children }: {children: React.ReactNode;}) {
+
+export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [settings, setSettings] = useState<StoreSettings>(defaultSettings);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const storedProducts = localStorage.getItem('store_products');
-    const storedCategories = localStorage.getItem('store_categories');
-    const storedOrders = localStorage.getItem('store_orders');
-    const storedSettings = localStorage.getItem('store_settings');
-    if (storedProducts) setProducts(JSON.parse(storedProducts));else
-    setProducts(seedProducts);
-    if (storedCategories) setCategories(JSON.parse(storedCategories));else
-    setCategories(seedCategories);
-    if (storedOrders) setOrders(JSON.parse(storedOrders));
-    if (storedSettings) setSettings(JSON.parse(storedSettings));
-    setIsLoaded(true);
+    Promise.all([
+      api.getProducts().catch(() => null),
+      api.getCategories().catch(() => null),
+      api.getSettings().catch(() => null),
+      api.getOrders().catch(() => null),
+    ]).then(([prods, cats, setts, ords]) => {
+      setProducts(prods ?? seedProducts);
+      setCategories(cats ?? seedCategories);
+      if (setts) setSettings(setts);
+      if (ords) setOrders(ords);
+    }).finally(() => setLoading(false));
   }, []);
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('store_products', JSON.stringify(products));
-      localStorage.setItem('store_categories', JSON.stringify(categories));
-      localStorage.setItem('store_orders', JSON.stringify(orders));
-      localStorage.setItem('store_settings', JSON.stringify(settings));
-    }
-  }, [products, categories, orders, settings, isLoaded]);
-  const addProduct = (
-  productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) =>
-  {
-    const newProduct: Product = {
-      ...productData,
-      id: `prod-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    setProducts((prev) => [...prev, newProduct]);
+
+  const addProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const tempId = `temp-${Date.now()}`;
+    const now = new Date().toISOString();
+    const optimistic: Product = { ...productData, id: tempId, createdAt: now, updatedAt: now };
+    setProducts((prev) => [...prev, optimistic]);
+
+    api.createProduct(productData)
+      .then((saved) => setProducts((prev) => prev.map((p) => p.id === tempId ? saved : p)))
+      .catch(() => {
+        setProducts((prev) => prev.filter((p) => p.id !== tempId));
+        toast.error('Failed to add product');
+      });
   };
+
   const updateProduct = (id: string, data: Partial<Product>) => {
     setProducts((prev) =>
-    prev.map((p) =>
-    p.id === id ?
-    {
-      ...p,
-      ...data,
-      updatedAt: new Date().toISOString()
-    } :
-    p
-    )
+      prev.map((p) => p.id === id ? { ...p, ...data, updatedAt: new Date().toISOString() } : p)
     );
+
+    api.updateProduct(id, data)
+      .then((saved) => setProducts((prev) => prev.map((p) => p.id === id ? saved : p)))
+      .catch(() => toast.error('Failed to update product'));
   };
+
   const deleteProduct = (id: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
+
+    api.deleteProduct(id)
+      .catch(() => toast.error('Failed to delete product'));
   };
-  const addCategory = (
-  categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) =>
-  {
-    const newCategory: Category = {
-      ...categoryData,
-      id: `cat-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    setCategories((prev) => [...prev, newCategory]);
+
+  const addCategory = (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const tempId = `temp-${Date.now()}`;
+    const now = new Date().toISOString();
+    const optimistic: Category = { ...categoryData, id: tempId, createdAt: now, updatedAt: now };
+    setCategories((prev) => [...prev, optimistic]);
+
+    api.createCategory(categoryData)
+      .then((saved) => setCategories((prev) => prev.map((c) => c.id === tempId ? saved : c)))
+      .catch(() => {
+        setCategories((prev) => prev.filter((c) => c.id !== tempId));
+        toast.error('Failed to add category');
+      });
   };
+
   const updateCategory = (id: string, data: Partial<Category>) => {
     setCategories((prev) =>
-    prev.map((c) =>
-    c.id === id ?
-    {
-      ...c,
-      ...data,
-      updatedAt: new Date().toISOString()
-    } :
-    c
-    )
+      prev.map((c) => c.id === id ? { ...c, ...data, updatedAt: new Date().toISOString() } : c)
     );
+
+    api.updateCategory(id, data)
+      .then((saved) => setCategories((prev) => prev.map((c) => c.id === id ? saved : c)))
+      .catch(() => toast.error('Failed to update category'));
   };
+
   const deleteCategory = (id: string) => {
     setCategories((prev) => prev.filter((c) => c.id !== id));
+
+    api.deleteCategory(id)
+      .catch(() => toast.error('Failed to delete category'));
   };
-  const addOrder = (
-  orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) =>
-  {
-    const newOrder: Order = {
-      ...orderData,
-      id: `ord-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    setOrders((prev) => [newOrder, ...prev]);
+
+  const addOrder = (orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const tempId = `temp-${Date.now()}`;
+    const now = new Date().toISOString();
+    const optimistic: Order = { ...orderData, id: tempId, createdAt: now, updatedAt: now };
+    setOrders((prev) => [optimistic, ...prev]);
+
+    api.placeOrder(orderData)
+      .then((saved) => setOrders((prev) => prev.map((o) => o.id === tempId ? saved : o)))
+      .catch(() => toast.error('Failed to save order — your order was received but may not have saved'));
   };
+
   const updateOrderStatus = (id: string, status: Order['status']) => {
     setOrders((prev) =>
-    prev.map((o) =>
-    o.id === id ?
-    {
-      ...o,
-      status,
-      updatedAt: new Date().toISOString()
-    } :
-    o
-    )
+      prev.map((o) => o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o)
     );
+
+    api.updateOrderStatus(id, status)
+      .then((saved) => setOrders((prev) => prev.map((o) => o.id === id ? saved : o)))
+      .catch(() => toast.error('Failed to update order status'));
   };
+
   const updateSettings = (newSettings: Partial<StoreSettings>) => {
-    setSettings((prev) => ({
-      ...prev,
-      ...newSettings
-    }));
+    setSettings((prev) => ({ ...prev, ...newSettings }));
+
+    api.updateSettings(newSettings)
+      .then((saved) => setSettings(saved))
+      .catch(() => toast.error('Failed to save settings'));
   };
-  if (!isLoaded) return null;
+
+  if (loading) return null;
+
   return (
     <StoreContext.Provider
       value={{
@@ -211,6 +222,7 @@ export function StoreProvider({ children }: {children: React.ReactNode;}) {
         categories,
         orders,
         settings,
+        loading,
         addProduct,
         updateProduct,
         deleteProduct,
@@ -219,13 +231,14 @@ export function StoreProvider({ children }: {children: React.ReactNode;}) {
         deleteCategory,
         addOrder,
         updateOrderStatus,
-        updateSettings
-      }}>
-      
+        updateSettings,
+      }}
+    >
       {children}
-    </StoreContext.Provider>);
-
+    </StoreContext.Provider>
+  );
 }
+
 export function useStore() {
   const context = useContext(StoreContext);
   if (context === undefined) {
