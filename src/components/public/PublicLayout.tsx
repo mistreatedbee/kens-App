@@ -14,7 +14,7 @@ export function PublicLayout() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <main className="flex-grow pt-24">
+      <main className="flex-grow pt-32 lg:pt-40">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}

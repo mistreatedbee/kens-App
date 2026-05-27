@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -12,6 +12,8 @@ import {
 import { useStore, Order } from '../../context/StoreContext';
 import { formatCurrency, formatDate } from '../../lib/format';
 import { toast } from 'sonner';
+import { ORDER_STATUSES } from '../../lib/orderStatuses';
+import { StatusBadge } from '../../components/shared/StatusBadge';
 export function AdminOrderDetail() {
   const { id } = useParams<{
     id: string;
@@ -60,6 +62,9 @@ export function AdminOrderDetail() {
               Order {order.orderNumber}
             </h1>
             <p className="text-muted">{formatDate(order.createdAt)}</p>
+            <div className="mt-2">
+              <StatusBadge status={order.status} />
+            </div>
           </div>
         </div>
 
@@ -70,14 +75,9 @@ export function AdminOrderDetail() {
             onChange={handleStatusChange}
             className="px-4 py-2 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer font-medium">
             
-            <option value="New">New</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Processing">Processing</option>
-            <option value="Ready for collection">Ready for collection</option>
-            <option value="Out for delivery">Out for delivery</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
+            {ORDER_STATUSES.map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
           </select>
         </div>
       </div>

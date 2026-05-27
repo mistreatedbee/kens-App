@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Menu, X, Store } from 'lucide-react';
 import { AdminSidebar } from './AdminSidebar';
@@ -6,8 +6,11 @@ import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 export function AdminLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { settings } = useStore();
-  const { logout } = useAuth();
+  const { settings, refreshOrders } = useStore();
+  const { logout, isAuthenticated } = useAuth();
+  useEffect(() => {
+    if (isAuthenticated) refreshOrders();
+  }, [isAuthenticated, refreshOrders]);
   return (
     <div className="min-h-screen bg-background flex">
       <AdminSidebar />

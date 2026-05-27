@@ -10,6 +10,7 @@ import {
 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { toast } from 'sonner';
+import { ImageUpload } from '../../components/admin/ImageUpload';
 export function AdminSettings() {
   const { settings, updateSettings } = useStore();
   const [formData, setFormData] = useState(settings);
@@ -79,6 +80,14 @@ export function AdminSettings() {
                   className="w-full pl-10 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
               </div>
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <label className="text-sm text-muted">Store Logo</label>
+              <ImageUpload
+                images={formData.logo ? [formData.logo] : []}
+                multiple={false}
+                onChange={(images) => setFormData((prev) => ({ ...prev, logo: images[0] || '' }))}
+              />
             </div>
           </div>
         </div>

@@ -9,14 +9,16 @@ import {
 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatCurrency, formatDate } from '../../lib/format';
+import { StatusBadge } from '../../components/shared/StatusBadge';
 export function AdminDashboard() {
   const { products, categories, orders, settings } = useStore();
   const totalProducts = products.length;
   const totalCategories = categories.length;
   const totalOrders = orders.length;
   const pendingOrders = orders.filter((o) =>
-  ['New', 'Pending', 'Processing'].includes(o.status)
+  ['New', 'Pending', 'Confirmed', 'Processing', 'Ready for Collection', 'Out for Delivery'].includes(o.status)
   ).length;
+  const completedOrders = orders.filter((o) => o.status === 'Completed').length;
   const lowStockProducts = products.filter((p) => p.stock <= 5);
   const recentOrders = [...orders].
   sort(
@@ -52,6 +54,13 @@ export function AdminDashboard() {
     icon: AlertCircle,
     color: 'text-amber-400',
     bg: 'bg-amber-400/10'
+  },
+  {
+    name: 'Completed',
+    value: completedOrders,
+    icon: ShoppingCart,
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-400/10'
   }];
 
   return (
@@ -86,7 +95,7 @@ export function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
         {stats.map((stat, i) =>
         <div key={i} className="glass-card p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
@@ -146,11 +155,7 @@ export function AdminDashboard() {
                         {order.customerName}
                       </td>
                       <td className="py-4">
-                        <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${order.status === 'Completed' ? 'bg-green-500/10 text-green-400' : order.status === 'Cancelled' ? 'bg-red-500/10 text-red-400' : 'bg-amber-500/10 text-amber-400'}`}>
-                      
-                          {order.status}
-                        </span>
+                        <StatusBadge status={order.status} />
                       </td>
                       <td className="py-4 text-right text-fg font-medium">
                         {formatCurrency(order.total, settings.currency)}

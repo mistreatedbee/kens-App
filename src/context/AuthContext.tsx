@@ -1,38 +1,54 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
+import { api, AdminUser, clearAdminToken, setAdminToken } from '../lib/api';
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (password: string) => boolean;
+  admin: AdminUser | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: {children: React.ReactNode;}) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [admin, setAdmin] = useState<AdminUser | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    const auth = localStorage.getItem('store_admin_auth');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-    }
-    setIsLoaded(true);
+    api.me()
+      .then(({ admin }) => {
+        setAdmin(admin);
+        setIsAuthenticated(true);
+      })
+      .catch(() => {
+        setAdmin(null);
+        setIsAuthenticated(false);
+      })
+      .finally(() => setIsLoaded(true));
   }, []);
-  const login = (password: string) => {
-    // Simple hardcoded auth for demo purposes
-    if (password === 'admin123') {
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await api.login(email, password);
+      setAdminToken(response.token);
+      setAdmin(response.admin);
       setIsAuthenticated(true);
-      localStorage.setItem('store_admin_auth', 'true');
       return true;
+    } catch {
+      clearAdminToken();
+      setAdmin(null);
+      setIsAuthenticated(false);
+      return false;
     }
-    return false;
   };
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('store_admin_auth');
+    setAdmin(null);
+    clearAdminToken();
   };
-  if (!isLoaded) return null;
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        admin,
+        loading: !isLoaded,
         login,
         logout
       }}>

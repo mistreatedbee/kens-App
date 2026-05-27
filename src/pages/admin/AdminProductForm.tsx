@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { toast } from 'sonner';
+import { ImageUpload } from '../../components/admin/ImageUpload';
 export function AdminProductForm() {
   const { id } = useParams<{
     id: string;
@@ -17,7 +18,7 @@ export function AdminProductForm() {
     discountPrice: '',
     description: '',
     categoryId: '',
-    images: '',
+    images: [] as string[],
     stock: '10',
     isActive: true,
     isFeatured: false,
@@ -31,19 +32,22 @@ export function AdminProductForm() {
         discountPrice: existingProduct.discountPrice?.toString() || '',
         description: existingProduct.description,
         categoryId: existingProduct.categoryId,
-        images: existingProduct.images.join(', '),
+        images: existingProduct.images,
         stock: existingProduct.stock.toString(),
         isActive: existingProduct.isActive,
         isFeatured: existingProduct.isFeatured,
         isTrending: existingProduct.isTrending
       });
-    } else if (categories.length > 0 && !formData.categoryId) {
-      setFormData((prev) => ({
+    }
+  }, [isEditing, existingProduct]);
+  useEffect(() => {
+    if (!isEditing && categories.length > 0) {
+      setFormData((prev) => prev.categoryId ? prev : {
         ...prev,
         categoryId: categories[0].id
-      }));
+      });
     }
-  }, [isEditing, existingProduct, categories]);
+  }, [isEditing, categories]);
   const handleChange = (
   e: React.ChangeEvent<
     HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -71,10 +75,7 @@ export function AdminProductForm() {
     }
     const category = categories.find((c) => c.id === formData.categoryId);
     if (!category) return;
-    const imageArray = formData.images.
-    split(',').
-    map((s) => s.trim()).
-    filter(Boolean);
+    const imageArray = formData.images;
     if (imageArray.length === 0) {
       imageArray.push(
         'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80'
@@ -164,22 +165,14 @@ export function AdminProductForm() {
 
               <div className="space-y-2">
                 <label className="text-sm text-muted">
-                  Image URLs (comma separated) *
+                  Product Images *
                 </label>
-                <div className="relative">
-                  <ImageIcon className="absolute left-4 top-3.5 w-5 h-5 text-muted" />
-                  <input
-                    required
-                    type="text"
-                    name="images"
-                    value={formData.images}
-                    onChange={handleChange}
-                    placeholder="https://...jpg, https://...jpg"
-                    className="w-full pl-12 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
-                  
-                </div>
+                <ImageUpload
+                  images={formData.images}
+                  onChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                />
                 <p className="text-xs text-muted">
-                  First image will be used as the main thumbnail.
+                  Upload clear product photos. The first image is used as the main thumbnail.
                 </p>
               </div>
             </div>

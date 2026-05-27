@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Plus,
-  Search,
   Edit,
   Trash2,
-  MoreVertical,
   Eye,
   EyeOff } from
 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatCurrency } from '../../lib/format';
 import { toast } from 'sonner';
+import { ConfirmModal } from '../../components/shared/ConfirmModal';
+import { SearchBar } from '../../components/shared/SearchBar';
+import { EmptyState } from '../../components/shared/EmptyState';
 export function AdminProducts() {
   const { products, categories, settings, deleteProduct, updateProduct } =
   useStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
   const filteredProducts = products.filter((p) => {
     const matchesSearch = p.name.
     toLowerCase().
@@ -26,10 +28,7 @@ export function AdminProducts() {
     return matchesSearch && matchesCategory;
   });
   const handleDelete = (id: string, name: string) => {
-    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      deleteProduct(id);
-      toast.success('Product deleted');
-    }
+    setDeleteTarget({ id, name });
   };
   const toggleStatus = (id: string, currentStatus: boolean) => {
     updateProduct(id, {
@@ -55,15 +54,8 @@ export function AdminProducts() {
       <div className="glass-card rounded-2xl p-6">
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
-            
+          <div className="flex-1">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search products..." />
           </div>
           <select
             value={categoryFilter}
@@ -185,8 +177,8 @@ export function AdminProducts() {
               ) :
 
               <tr>
-                  <td colSpan={6} className="py-12 text-center text-muted">
-                    No products found.
+                  <td colSpan={6} className="py-4">
+                    <EmptyState title="No products found" body="Try changing the search or category filter." />
                   </td>
                 </tr>
               }
@@ -194,6 +186,18 @@ export function AdminProducts() {
           </table>
         </div>
       </div>
+      <ConfirmModal
+        open={Boolean(deleteTarget)}
+        title="Delete product?"
+        body={`This will permanently delete "${deleteTarget?.name}".`}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          if (!deleteTarget) return;
+          deleteProduct(deleteTarget.id);
+          toast.success('Product deleted');
+          setDeleteTarget(null);
+        }}
+      />
     </div>);
 
 }

@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
 import { useStore, Category } from '../../context/StoreContext';
 import { toast } from 'sonner';
+import { ImageUpload } from '../../components/admin/ImageUpload';
+import { ConfirmModal } from '../../components/shared/ConfirmModal';
 export function AdminCategories() {
   const { categories, products, addCategory, updateCategory, deleteCategory } =
   useStore();
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -33,9 +36,9 @@ export function AdminCategories() {
     setIsEditing(category.id);
     setIsAdding(false);
   };
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = (category: Category) => {
     const productsInCategory = products.filter(
-      (p) => p.categoryId === id
+      (p) => p.categoryId === category.id
     ).length;
     if (productsInCategory > 0) {
       toast.error(
@@ -43,10 +46,7 @@ export function AdminCategories() {
       );
       return;
     }
-    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      deleteCategory(id);
-      toast.success('Category deleted');
-    }
+    setDeleteTarget(category);
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,18 +120,12 @@ export function AdminCategories() {
               
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-muted">Image URL</label>
-                <input
-                type="text"
-                value={formData.image}
-                onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  image: e.target.value
-                })
-                }
-                className="w-full px-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
-              
+                <label className="text-sm text-muted">Category Image</label>
+                <ImageUpload
+                  images={formData.image ? [formData.image] : []}
+                  multiple={false}
+                  onChange={(images) => setFormData({ ...formData, image: images[0] || '' })}
+                />
               </div>
             </div>
 
@@ -204,7 +198,7 @@ export function AdminCategories() {
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDelete(category.id, category.name)}
+                    onClick={() => handleDelete(category)}
                     className="p-2 bg-black/50 hover:bg-red-500 hover:text-white text-white rounded-lg backdrop-blur-md transition-colors">
                     
                     <Trash2 className="w-4 h-4" />
@@ -231,6 +225,18 @@ export function AdminCategories() {
 
         })}
       </div>
+      <ConfirmModal
+        open={Boolean(deleteTarget)}
+        title="Delete category?"
+        body={`This will permanently delete "${deleteTarget?.name}".`}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          if (!deleteTarget) return;
+          deleteCategory(deleteTarget.id);
+          toast.success('Category deleted');
+          setDeleteTarget(null);
+        }}
+      />
     </div>);
 
 }

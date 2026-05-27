@@ -35,6 +35,9 @@ export function Home() {
 
   const featuredProducts = products.filter((p) => p.isActive && p.isFeatured).slice(0, 4);
   const trendingProducts = products.filter((p) => p.isActive && p.isTrending).slice(0, 4);
+  const flashSaleProducts = products.filter((p) => p.isActive && p.discountPrice).slice(0, 4);
+  const newArrivals = [...products].filter((p) => p.isActive).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 4);
+  const bestSellers = [...products].filter((p) => p.isActive).sort((a, b) => a.stock - b.stock).slice(0, 4);
   const heroProducts = products.filter((p) => p.isActive && p.images.length > 0).slice(0, 3);
 
   const stats = [
@@ -106,8 +109,8 @@ export function Home() {
               </span>
             </h1>
 
-            <p className="text-muted text-lg md:text-xl max-w-md mb-10 leading-relaxed">
-              Discover curated collections of quality products, delivered to your door.
+            <p className="text-muted text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
+              Search, browse, order, and arrange payment in minutes. A clean local marketplace built for easy shopping.
             </p>
 
             {/* CTAs */}
@@ -177,6 +180,16 @@ export function Home() {
       </section>
 
       {/* ── Categories ──────────────────────────────────────── */}
+      <section className="py-6 border-y border-black/5 dark:border-white/5 bg-surface">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          {['No customer account needed', 'Fast WhatsApp order follow-up', settings.deliveryInfo || 'Delivery and collection available'].map((text) => (
+            <div key={text} className="rounded-xl bg-background px-5 py-4 text-fg border border-black/5 dark:border-white/5">
+              {text}
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="py-24 bg-surface border-y border-black/5 dark:border-white/5">
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading
@@ -224,6 +237,23 @@ export function Home() {
       </section>
 
       {/* ── Featured Products ────────────────────────────────── */}
+      {flashSaleProducts.length > 0 && (
+        <section className="py-24 max-w-7xl mx-auto px-6">
+          <div className="rounded-2xl bg-accent p-6 md:p-10 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <p className="text-black/60 text-xs uppercase tracking-widest font-bold mb-2">Limited offers</p>
+              <h2 className="font-serif text-4xl text-black">Flash Sale</h2>
+            </div>
+            <Link to="/shop" className="inline-flex items-center gap-2 px-5 py-3 bg-black text-white rounded-full font-semibold">
+              Shop deals <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {flashSaleProducts.map((product) => <ProductCard key={product.id} product={product} />)}
+          </div>
+        </section>
+      )}
+
       {featuredProducts.length > 0 && (
         <section className="py-24 max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-12">
@@ -312,6 +342,26 @@ export function Home() {
       )}
 
       {/* ── CTA Banner ───────────────────────────────────────── */}
+      {newArrivals.length > 0 && (
+        <section className="py-24 bg-surface border-y border-black/5 dark:border-white/5">
+          <div className="max-w-7xl mx-auto px-6">
+            <SectionHeading title="New Arrivals" subtitle="Fresh products recently added to the store." />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {newArrivals.map((product) => <ProductCard key={product.id} product={product} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {bestSellers.length > 0 && (
+        <section className="py-24 max-w-7xl mx-auto px-6">
+          <SectionHeading title="Best Sellers" subtitle="Popular picks customers keep coming back for." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {bestSellers.map((product) => <ProductCard key={product.id} product={product} />)}
+          </div>
+        </section>
+      )}
+
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div

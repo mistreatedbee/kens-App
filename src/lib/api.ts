@@ -1,15 +1,46 @@
 import type { Product, Category, Order, StoreSettings } from '../context/StoreContext';
 
 const BASE = import.meta.env.VITE_API_URL ?? '';
-const ADMIN_KEY = import.meta.env.VITE_ADMIN_API_KEY ?? '';
+const TOKEN_KEY = 'store_admin_token';
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  name: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  admin: AdminUser;
+}
+
+export function getAdminToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setAdminToken(token: string) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function clearAdminToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
 
 function normalize<T>(doc: Record<string, unknown>): T {
-  const { _id, __v, ...rest } = doc;
+  const rest = { ...doc };
+  const _id = rest._id;
+  delete rest._id;
+  delete rest.__v;
   return { id: _id, ...rest } as unknown as T;
 }
 
 function normalizeSettings(doc: Record<string, unknown>): StoreSettings {
-  const { _id, id, __v, createdAt, updatedAt, ...rest } = doc;
+  const rest = { ...doc };
+  delete rest._id;
+  delete rest.id;
+  delete rest.__v;
+  delete rest.createdAt;
+  delete rest.updatedAt;
   return rest as StoreSettings;
 }
 
@@ -21,7 +52,10 @@ async function request<T>(
 ): Promise<T> {
   const headers: Record<string, string> = {};
   if (body !== undefined) headers['Content-Type'] = 'application/json';
-  if (admin && ADMIN_KEY) headers['x-admin-key'] = ADMIN_KEY;
+  if (admin) {
+    const token = getAdminToken();
+    if (token) headers.Authorization = `Bearer ${token}`;
+  }
 
   const res = await fetch(`${BASE}${path}`, {
     method,
@@ -31,7 +65,15 @@ async function request<T>(
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(text || `Request failed: ${res.status}`);
+    let message = text || `Request failed: ${res.status}`;
+    try {
+      const parsed = JSON.parse(text);
+      message = parsed.error || message;
+    } catch {
+      // Keep plain text response.
+    }
+    if (res.status === 401) clearAdminToken();
+    throw new Error(message);
   }
 
   const data = await res.json();
@@ -46,6 +88,29 @@ async function request<T>(
 }
 
 export const api = {
+  login: (email: string, password: string) =>
+    request<LoginResponse>('POST', '/api/auth/login', { email, password }),
+  me: () => request<{ admin: AdminUser }>('GET', '/api/auth/me', undefined, true),
+  uploadImage: async (file: File) => {
+    const token = getAdminToken();
+    const data = new FormData();
+    data.append('image', file);
+
+    const res = await fetch(`${BASE}/api/uploads/image`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      body: data,
+    });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      if (res.status === 401) clearAdminToken();
+      throw new Error(body.error || 'Image upload failed');
+    }
+
+    return res.json() as Promise<{ url: string; publicId: string }>;
+  },
+
   getProducts: () => request<Product[]>('GET', '/api/products'),
   createProduct: (data: unknown) =>
     request<Product>('POST', '/api/products', data, true),
@@ -63,6 +128,8 @@ export const api = {
     request<{ success: boolean }>('DELETE', `/api/categories/${id}`, undefined, true),
 
   getOrders: () => request<Order[]>('GET', '/api/orders', undefined, true),
+  getOrderByNumber: (orderNumber: string) =>
+    request<Order>('GET', `/api/orders/number/${encodeURIComponent(orderNumber)}`),
   placeOrder: (data: unknown) => request<Order>('POST', '/api/orders', data),
   updateOrderStatus: (id: string, status: string) =>
     request<Order>('PATCH', `/api/orders/${id}/status`, { status }, true),

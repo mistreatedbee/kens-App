@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/public/ProductCard';
 import { SectionHeading } from '../components/shared/SectionHeading';
@@ -10,12 +10,17 @@ export function Shop() {
   const { products, categories } = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchParam = searchParams.get('search');
+  const [searchQuery, setSearchQuery] = useState(searchParam || '');
   const [selectedCategory, setSelectedCategory] = useState<string>(
     categoryParam || 'all'
   );
   const [sortBy, setSortBy] = useState<SortOption>('latest');
   const [showFilters, setShowFilters] = useState(false);
+  React.useEffect(() => {
+    setSearchQuery(searchParam || '');
+    setSelectedCategory(categoryParam || 'all');
+  }, [searchParam, categoryParam]);
   // Update URL when category changes
   const handleCategoryChange = (catSlug: string) => {
     setSelectedCategory(catSlug);

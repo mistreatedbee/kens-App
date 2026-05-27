@@ -1,4 +1,3 @@
-import { generateId } from './id';
 import { Category, Product, StoreSettings } from '../context/StoreContext';
 
 export const defaultSettings: StoreSettings = {

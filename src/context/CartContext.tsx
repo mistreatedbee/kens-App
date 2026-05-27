@@ -80,7 +80,13 @@ export function CartProvider({ children }: {children: React.ReactNode;}) {
     const price = item.product.discountPrice || item.product.price;
     return sum + price * item.quantity;
   }, 0);
-  if (!isLoaded) return null;
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-background text-muted flex items-center justify-center">
+        Loading cart...
+      </div>
+    );
+  }
   return (
     <CartContext.Provider
       value={{

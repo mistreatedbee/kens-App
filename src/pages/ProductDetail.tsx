@@ -61,6 +61,10 @@ export function ProductDetail() {
       `Added ${quantity} ${quantity === 1 ? 'item' : 'items'} to cart`
     );
   };
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    navigate('/checkout');
+  };
   const handleShare = async () => {
     try {
       await navigator.share({
@@ -225,6 +229,22 @@ export function ProductDetail() {
               <MessageCircle className="w-5 h-5" />
               Enquire on WhatsApp
             </a>
+            <button
+              onClick={handleBuyNow}
+              disabled={isOutOfStock}
+              className="flex-1 py-4 bg-black text-white font-semibold rounded-full hover:bg-accent hover:text-black transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              Buy Now
+            </button>
+          </div>
+
+          <div className="mt-10 glass-card rounded-2xl p-6">
+            <h2 className="text-xl font-semibold text-fg mb-4">Product Details</h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div><dt className="text-muted">Category</dt><dd className="text-fg font-medium">{product.categoryName}</dd></div>
+              <div><dt className="text-muted">Stock</dt><dd className="text-fg font-medium">{product.stock} available</dd></div>
+              <div><dt className="text-muted">Rating</dt><dd className="text-fg font-medium">New product</dd></div>
+              <div><dt className="text-muted">Order type</dt><dd className="text-fg font-medium">Delivery or collection</dd></div>
+            </dl>
           </div>
         </div>
       </div>

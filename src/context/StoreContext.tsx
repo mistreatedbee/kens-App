@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from 'react';
+import React, { useCallback, useEffect, useState, createContext, useContext } from 'react';
 import { toast } from 'sonner';
 import { defaultSettings, seedCategories, seedProducts } from '../lib/seed';
 import { api } from '../lib/api';
@@ -57,8 +57,8 @@ export interface Order {
     | 'Pending'
     | 'Confirmed'
     | 'Processing'
-    | 'Ready for collection'
-    | 'Out for delivery'
+    | 'Ready for Collection'
+    | 'Out for Delivery'
     | 'Completed'
     | 'Cancelled';
   createdAt: string;
@@ -97,6 +97,7 @@ interface StoreContextType {
   addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateOrderStatus: (id: string, status: Order['status']) => void;
   updateSettings: (settings: Partial<StoreSettings>) => void;
+  refreshOrders: () => Promise<void>;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -213,7 +214,22 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       .catch(() => toast.error('Failed to save settings'));
   };
 
-  if (loading) return null;
+  const refreshOrders = useCallback(async () => {
+    try {
+      const freshOrders = await api.getOrders();
+      setOrders(freshOrders);
+    } catch {
+      setOrders([]);
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-muted flex items-center justify-center">
+        Loading store...
+      </div>
+    );
+  }
 
   return (
     <StoreContext.Provider
@@ -232,6 +248,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         addOrder,
         updateOrderStatus,
         updateSettings,
+        refreshOrders,
       }}
     >
       {children}

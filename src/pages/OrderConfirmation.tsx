@@ -3,25 +3,27 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   CheckCircle,
   MessageCircle,
-  ArrowRight,
   ShoppingBag } from
 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { buildOrderWhatsAppMessage } from '../lib/whatsapp';
 import { formatCurrency } from '../lib/format';
 import { motion } from 'framer-motion';
+import { api } from '../lib/api';
 export function OrderConfirmation() {
   const { orderId } = useParams<{
     orderId: string;
   }>();
   const { orders, settings } = useStore();
   const navigate = useNavigate();
-  const order = orders.find((o) => o.orderNumber === orderId);
+  const [remoteOrder, setRemoteOrder] = React.useState<typeof orders[number] | null>(null);
+  const order = orders.find((o) => o.orderNumber === orderId) || remoteOrder;
   useEffect(() => {
+    if (!orderId) return;
     if (!order) {
-      navigate('/');
+      api.getOrderByNumber(orderId).then(setRemoteOrder).catch(() => navigate('/'));
     }
-  }, [order, navigate]);
+  }, [order, orderId, navigate]);
   if (!order) return null;
   return (
     <div className="max-w-3xl mx-auto px-6 py-24">

@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Store, Lock, ArrowLeft } from 'lucide-react';
+import { Store, Lock, ArrowLeft, Mail } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useStore } from '../../context/StoreContext';
 import { toast } from 'sonner';
 export function AdminLogin() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
   const { settings } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/admin';
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(password)) {
+    setIsSubmitting(true);
+    if (await login(email, password)) {
       toast.success('Logged in successfully');
       navigate(from, {
         replace: true
       });
     } else {
-      toast.error('Invalid password');
+      toast.error('Invalid email or password');
     }
+    setIsSubmitting(false);
   };
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 relative">
@@ -45,6 +49,19 @@ export function AdminLogin() {
         <form
           onSubmit={handleSubmit}
           className="glass-card p-8 rounded-3xl space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm text-muted">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@example.com"
+                className="w-full pl-12 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors"
+                required />
+            </div>
+          </div>
           
           <div className="space-y-2">
             <label className="text-sm text-muted">Admin Password</label>
@@ -54,21 +71,22 @@ export function AdminLogin() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password (admin123)"
+                placeholder="Enter password"
                 className="w-full pl-12 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors"
                 required />
               
             </div>
             <p className="text-xs text-muted mt-2">
-              Demo password: admin123
+              Use the admin email and password configured on the backend.
             </p>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-accent text-black font-semibold rounded-xl hover:bg-white transition-colors">
+            disabled={isSubmitting}
+            className="w-full py-3 bg-accent text-black font-semibold rounded-xl hover:bg-white transition-colors disabled:opacity-70">
             
-            Login to Dashboard
+            {isSubmitting ? 'Signing in...' : 'Login to Dashboard'}
           </button>
         </form>
       </div>

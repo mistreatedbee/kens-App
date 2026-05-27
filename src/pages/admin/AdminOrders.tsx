@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Eye } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatCurrency, formatDate } from '../../lib/format';
+import { ORDER_STATUSES } from '../../lib/orderStatuses';
+import { StatusBadge } from '../../components/shared/StatusBadge';
+import { SearchBar } from '../../components/shared/SearchBar';
+import { EmptyState } from '../../components/shared/EmptyState';
 export function AdminOrders() {
   const { orders, settings } = useStore();
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,28 +18,6 @@ export function AdminOrders() {
     const matchesStatus = statusFilter === 'all' || o.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'New':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      case 'Pending':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-      case 'Confirmed':
-        return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
-      case 'Processing':
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-      case 'Ready for collection':
-        return 'bg-teal-500/10 text-teal-400 border-teal-500/20';
-      case 'Out for delivery':
-        return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
-      case 'Completed':
-        return 'bg-green-500/10 text-green-400 border-green-500/20';
-      case 'Cancelled':
-        return 'bg-red-500/10 text-red-400 border-red-500/20';
-      default:
-        return 'bg-zinc-500/10 text-muted border-zinc-500/20';
-    }
-  };
   return (
     <div className="space-y-8">
       <div>
@@ -46,15 +28,8 @@ export function AdminOrders() {
       <div className="glass-card rounded-2xl p-6">
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-            <input
-              type="text"
-              placeholder="Search by order number or customer name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
-            
+          <div className="flex-1">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search by order number or customer name..." />
           </div>
           <select
             value={statusFilter}
@@ -62,14 +37,9 @@ export function AdminOrders() {
             className="px-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors appearance-none sm:w-48 cursor-pointer">
             
             <option value="all">All Statuses</option>
-            <option value="New">New</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Processing">Processing</option>
-            <option value="Ready for collection">Ready for collection</option>
-            <option value="Out for delivery">Out for delivery</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
+            {ORDER_STATUSES.map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
           </select>
         </div>
 
@@ -115,11 +85,7 @@ export function AdminOrders() {
                       {order.deliveryType}
                     </td>
                     <td className="py-4 px-4">
-                      <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(order.status)}`}>
-                    
-                        {order.status}
-                      </span>
+                      <StatusBadge status={order.status} />
                     </td>
                     <td className="py-4 px-4 text-fg font-medium">
                       {formatCurrency(order.total, settings.currency)}
@@ -136,8 +102,8 @@ export function AdminOrders() {
               ) :
 
               <tr>
-                  <td colSpan={7} className="py-12 text-center text-muted">
-                    No orders found.
+                  <td colSpan={7} className="py-4">
+                    <EmptyState title="No orders found" body="Try a different search or status filter." />
                   </td>
                 </tr>
               }
