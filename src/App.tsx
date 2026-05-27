@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 // Providers
+import { ThemeProvider } from './context/ThemeContext';
 import { StoreProvider } from './context/StoreContext';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -29,6 +30,7 @@ import { AdminSettings } from './pages/admin/AdminSettings';
 export function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <StoreProvider>
         <CartProvider>
           <AuthProvider>
@@ -75,6 +77,7 @@ export function App() {
           </AuthProvider>
         </CartProvider>
       </StoreProvider>
+      </ThemeProvider>
     </BrowserRouter>);
 
 }

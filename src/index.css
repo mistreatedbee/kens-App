@@ -8,16 +8,66 @@
 
 /* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
 
+/* ── Light mode (default) ──────────────────────────────── */
+:root {
+  --bg:         #F9F7F4;
+  --surface:    #EDEAE5;
+  --accent:     #FFB547;
+  --fg:         #0F0E0C;
+  --fg-muted:   #6B7280;
+  --border-col: rgba(0, 0, 0, 0.08);
+}
+
+/* ── Dark mode ─────────────────────────────────────────── */
+.dark {
+  --bg:         #0A0A0B;
+  --surface:    #131316;
+  --accent:     #FFB547;
+  --fg:         #E4E4E7;
+  --fg-muted:   #71717A;
+  --border-col: rgba(255, 255, 255, 0.07);
+}
+
 @layer base {
   body {
-    @apply bg-background text-zinc-200 font-sans antialiased selection:bg-accent/30 selection:text-accent;
+    @apply bg-background text-fg font-sans antialiased;
+  }
+  ::selection {
+    background-color: rgba(255, 181, 71, 0.3);
+    color: #FFB547;
   }
 }
+
 @layer utilities {
   .glass {
-    @apply bg-white/[0.03] backdrop-blur-md border border-white/[0.08];
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
+
+  :root:not(.dark) .glass {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .dark .glass {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .glass-card {
-    @apply bg-surface border border-white/[0.08] shadow-xl;
+    background: var(--surface);
+    border: 1px solid var(--border-col);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .dark .glass-card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border-col);
+    border-radius: 2px;
   }
 }
