@@ -113,15 +113,15 @@ export function AdminProductForm() {
       <div className="flex items-center gap-4">
         <Link
           to="/admin/products"
-          className="p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-colors">
+          className="p-2 text-muted hover:text-fg hover:bg-black/10 dark:hover:bg-white/10 rounded-full transition-colors">
           
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-3xl font-serif text-white">
+          <h1 className="text-3xl font-serif text-fg">
             {isEditing ? 'Edit Product' : 'Add New Product'}
           </h1>
-          <p className="text-zinc-400">
+          <p className="text-muted">
             {isEditing ?
             'Update product details.' :
             'Create a new product for your store.'}
@@ -134,40 +134,40 @@ export function AdminProductForm() {
           {/* Main Info */}
           <div className="md:col-span-2 space-y-6">
             <div className="glass-card p-6 rounded-2xl space-y-6">
-              <h2 className="text-xl font-medium text-white mb-4">
+              <h2 className="text-xl font-medium text-fg mb-4">
                 Basic Information
               </h2>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">Product Name *</label>
+                <label className="text-sm text-muted">Product Name *</label>
                 <input
                   required
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                  className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">Description *</label>
+                <label className="text-sm text-muted">Description *</label>
                 <textarea
                   required
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   rows={5}
-                  className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none" />
+                  className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none" />
                 
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">
+                <label className="text-sm text-muted">
                   Image URLs (comma separated) *
                 </label>
                 <div className="relative">
-                  <ImageIcon className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500" />
+                  <ImageIcon className="absolute left-4 top-3.5 w-5 h-5 text-muted" />
                   <input
                     required
                     type="text"
@@ -175,23 +175,23 @@ export function AdminProductForm() {
                     value={formData.images}
                     onChange={handleChange}
                     placeholder="https://...jpg, https://...jpg"
-                    className="w-full pl-12 pr-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                    className="w-full pl-12 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                   
                 </div>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-muted">
                   First image will be used as the main thumbnail.
                 </p>
               </div>
             </div>
 
             <div className="glass-card p-6 rounded-2xl space-y-6">
-              <h2 className="text-xl font-medium text-white mb-4">
+              <h2 className="text-xl font-medium text-fg mb-4">
                 Pricing & Stock
               </h2>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm text-zinc-400">
+                  <label className="text-sm text-muted">
                     Regular Price *
                   </label>
                   <input
@@ -202,11 +202,11 @@ export function AdminProductForm() {
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                    className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                   
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm text-zinc-400">
+                  <label className="text-sm text-muted">
                     Discount Price (Optional)
                   </label>
                   <input
@@ -216,13 +216,13 @@ export function AdminProductForm() {
                     name="discountPrice"
                     value={formData.discountPrice}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                    className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                   
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">
+                <label className="text-sm text-muted">
                   Stock Quantity *
                 </label>
                 <input
@@ -232,7 +232,7 @@ export function AdminProductForm() {
                   name="stock"
                   value={formData.stock}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                  className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
               </div>
             </div>
@@ -241,18 +241,18 @@ export function AdminProductForm() {
           {/* Sidebar */}
           <div className="space-y-6">
             <div className="glass-card p-6 rounded-2xl space-y-6">
-              <h2 className="text-xl font-medium text-white mb-4">
+              <h2 className="text-xl font-medium text-fg mb-4">
                 Organization
               </h2>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">Category *</label>
+                <label className="text-sm text-muted">Category *</label>
                 <select
                   required
                   name="categoryId"
                   value={formData.categoryId}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer">
+                  className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer">
                   
                   <option value="" disabled>
                     Select a category
@@ -267,48 +267,48 @@ export function AdminProductForm() {
             </div>
 
             <div className="glass-card p-6 rounded-2xl space-y-6">
-              <h2 className="text-xl font-medium text-white mb-4">
+              <h2 className="text-xl font-medium text-fg mb-4">
                 Status & Visibility
               </h2>
 
               <label className="flex items-center justify-between cursor-pointer group">
                 <div>
-                  <div className="text-white font-medium group-hover:text-accent transition-colors">
+                  <div className="text-fg font-medium group-hover:text-accent transition-colors">
                     Active
                   </div>
-                  <div className="text-xs text-zinc-500">Visible on store</div>
+                  <div className="text-xs text-muted">Visible on store</div>
                 </div>
                 <input
                   type="checkbox"
                   name="isActive"
                   checked={formData.isActive}
                   onChange={handleChange}
-                  className="w-5 h-5 rounded border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
+                  className="w-5 h-5 rounded border-black/10 dark:border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
                 
               </label>
 
               <label className="flex items-center justify-between cursor-pointer group">
                 <div>
-                  <div className="text-white font-medium group-hover:text-accent transition-colors">
+                  <div className="text-fg font-medium group-hover:text-accent transition-colors">
                     Featured
                   </div>
-                  <div className="text-xs text-zinc-500">Show on homepage</div>
+                  <div className="text-xs text-muted">Show on homepage</div>
                 </div>
                 <input
                   type="checkbox"
                   name="isFeatured"
                   checked={formData.isFeatured}
                   onChange={handleChange}
-                  className="w-5 h-5 rounded border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
+                  className="w-5 h-5 rounded border-black/10 dark:border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
                 
               </label>
 
               <label className="flex items-center justify-between cursor-pointer group">
                 <div>
-                  <div className="text-white font-medium group-hover:text-accent transition-colors">
+                  <div className="text-fg font-medium group-hover:text-accent transition-colors">
                     Trending
                   </div>
-                  <div className="text-xs text-zinc-500">
+                  <div className="text-xs text-muted">
                     Add trending badge
                   </div>
                 </div>
@@ -317,7 +317,7 @@ export function AdminProductForm() {
                   name="isTrending"
                   checked={formData.isTrending}
                   onChange={handleChange}
-                  className="w-5 h-5 rounded border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
+                  className="w-5 h-5 rounded border-black/10 dark:border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
                 
               </label>
             </div>

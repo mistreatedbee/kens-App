@@ -34,7 +34,7 @@ export function ProductDetail() {
   if (!product) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-6">
-        <h2 className="text-2xl font-serif text-white mb-4">
+        <h2 className="text-2xl font-serif text-fg mb-4">
           Product not found
         </h2>
         <button
@@ -78,7 +78,7 @@ export function ProductDetail() {
     <div className="max-w-7xl mx-auto px-6 py-12">
       <Link
         to="/shop"
-        className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
+        className="inline-flex items-center gap-2 text-muted hover:text-fg mb-8 transition-colors">
         
         <ArrowLeft className="w-4 h-4" /> Back to Shop
       </Link>
@@ -86,7 +86,7 @@ export function ProductDetail() {
       <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mb-24">
         {/* Image Gallery */}
         <div className="space-y-4">
-          <div className="aspect-square rounded-3xl overflow-hidden bg-surface border border-white/5 relative">
+          <div className="aspect-square rounded-3xl overflow-hidden bg-surface border border-black/5 dark:border-white/5 relative">
             <img
               src={product.images[activeImage]}
               alt={product.name}
@@ -134,34 +134,34 @@ export function ProductDetail() {
             </Link>
             <button
               onClick={handleShare}
-              className="p-2 text-zinc-400 hover:text-white rounded-full hover:bg-white/5 transition-colors">
+              className="p-2 text-muted hover:text-fg rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
               
               <Share2 className="w-5 h-5" />
             </button>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-serif text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-serif text-fg mb-6">
             {product.name}
           </h1>
 
           <div className="flex items-center gap-4 mb-8">
             {product.discountPrice ?
             <>
-                <span className="text-3xl font-semibold text-white">
+                <span className="text-3xl font-semibold text-fg">
                   {formatCurrency(product.discountPrice, settings.currency)}
                 </span>
-                <span className="text-xl text-zinc-500 line-through">
+                <span className="text-xl text-muted line-through">
                   {formatCurrency(product.price, settings.currency)}
                 </span>
               </> :
 
-            <span className="text-3xl font-semibold text-white">
+            <span className="text-3xl font-semibold text-fg">
                 {formatCurrency(product.price, settings.currency)}
               </span>
             }
           </div>
 
-          <p className="text-zinc-400 text-lg leading-relaxed mb-10">
+          <p className="text-muted text-lg leading-relaxed mb-10">
             {product.description}
           </p>
 
@@ -182,22 +182,22 @@ export function ProductDetail() {
 
             {!isOutOfStock &&
             <div className="flex items-center gap-4">
-                <span className="text-zinc-300 font-medium">Quantity</span>
-                <div className="flex items-center bg-surface border border-white/10 rounded-full p-1">
+                <span className="text-muted font-medium">Quantity</span>
+                <div className="flex items-center bg-surface border border-black/10 dark:border-white/10 rounded-full p-1">
                   <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-colors">
+                  className="w-10 h-10 flex items-center justify-center text-muted hover:text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors">
                   
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="w-12 text-center text-white font-medium">
+                  <span className="w-12 text-center text-fg font-medium">
                     {quantity}
                   </span>
                   <button
                   onClick={() =>
                   setQuantity(Math.min(product.stock, quantity + 1))
                   }
-                  className="w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-colors">
+                  className="w-10 h-10 flex items-center justify-center text-muted hover:text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors">
                   
                     <Plus className="w-4 h-4" />
                   </button>
@@ -220,7 +220,7 @@ export function ProductDetail() {
               href={buildEnquiryUrl(product, settings)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 py-4 bg-surface border border-white/10 text-white font-medium rounded-full hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
+              className="flex-1 py-4 bg-surface border border-black/10 dark:border-white/10 text-fg font-medium rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
               
               <MessageCircle className="w-5 h-5" />
               Enquire on WhatsApp
@@ -231,8 +231,8 @@ export function ProductDetail() {
 
       {/* Related Products */}
       {relatedProducts.length > 0 &&
-      <div className="pt-24 border-t border-white/5">
-          <h2 className="text-3xl font-serif text-white mb-8">
+      <div className="pt-24 border-t border-black/5 dark:border-white/5">
+          <h2 className="text-3xl font-serif text-fg mb-8">
             You might also like
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

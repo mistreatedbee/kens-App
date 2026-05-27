@@ -75,8 +75,8 @@ export function AdminCategories() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-serif text-white mb-2">Categories</h1>
-          <p className="text-zinc-400">Manage your product categories.</p>
+          <h1 className="text-3xl font-serif text-fg mb-2">Categories</h1>
+          <p className="text-muted">Manage your product categories.</p>
         </div>
         {!isAdding && !isEditing &&
         <button
@@ -91,12 +91,12 @@ export function AdminCategories() {
       {(isAdding || isEditing) &&
       <div className="glass-card rounded-2xl p-6 border border-accent/20">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-medium text-white">
+            <h2 className="text-xl font-medium text-fg">
               {isEditing ? 'Edit Category' : 'New Category'}
             </h2>
             <button
             onClick={resetForm}
-            className="p-2 text-zinc-400 hover:text-white rounded-full hover:bg-white/10">
+            className="p-2 text-muted hover:text-fg rounded-full hover:bg-black/10 dark:hover:bg-white/10">
             
               <X className="w-5 h-5" />
             </button>
@@ -105,7 +105,7 @@ export function AdminCategories() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">Category Name *</label>
+                <label className="text-sm text-muted">Category Name *</label>
                 <input
                 required
                 type="text"
@@ -116,11 +116,11 @@ export function AdminCategories() {
                   name: e.target.value
                 })
                 }
-                className="w-full px-4 py-2.5 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                className="w-full px-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">Image URL</label>
+                <label className="text-sm text-muted">Image URL</label>
                 <input
                 type="text"
                 value={formData.image}
@@ -130,13 +130,13 @@ export function AdminCategories() {
                   image: e.target.value
                 })
                 }
-                className="w-full px-4 py-2.5 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                className="w-full px-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">Description</label>
+              <label className="text-sm text-muted">Description</label>
               <textarea
               value={formData.description}
               onChange={(e) =>
@@ -146,7 +146,7 @@ export function AdminCategories() {
               })
               }
               rows={2}
-              className="w-full px-4 py-2.5 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none" />
+              className="w-full px-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none" />
             
             </div>
 
@@ -161,9 +161,9 @@ export function AdminCategories() {
                   isActive: e.target.checked
                 })
                 }
-                className="w-4 h-4 rounded border-white/10 bg-background text-accent focus:ring-accent" />
+                className="w-4 h-4 rounded border-black/10 dark:border-white/10 bg-background text-accent focus:ring-accent" />
               
-                <span className="text-white text-sm">
+                <span className="text-fg text-sm">
                   Active (Visible on store)
                 </span>
               </label>
@@ -217,13 +217,13 @@ export function AdminCategories() {
                 }
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-medium text-white mb-1">
+                <h3 className="text-lg font-medium text-fg mb-1">
                   {category.name}
                 </h3>
-                <p className="text-sm text-zinc-400 mb-4 line-clamp-1">
+                <p className="text-sm text-muted mb-4 line-clamp-1">
                   {category.description || 'No description'}
                 </p>
-                <div className="text-sm text-zinc-500 font-medium">
+                <div className="text-sm text-muted font-medium">
                   {productCount} {productCount === 1 ? 'Product' : 'Products'}
                 </div>
               </div>

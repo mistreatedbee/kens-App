@@ -13,13 +13,13 @@ export function Cart() {
   if (items.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-6 py-24 text-center">
-        <div className="w-24 h-24 mx-auto bg-surface rounded-full flex items-center justify-center text-zinc-500 mb-8 border border-white/5">
+        <div className="w-24 h-24 mx-auto bg-surface rounded-full flex items-center justify-center text-muted mb-8 border border-black/5 dark:border-white/5">
           <ShoppingBag className="w-10 h-10" />
         </div>
-        <h2 className="text-3xl font-serif text-white mb-4">
+        <h2 className="text-3xl font-serif text-fg mb-4">
           Your cart is empty
         </h2>
-        <p className="text-zinc-400 mb-8 text-lg">
+        <p className="text-muted mb-8 text-lg">
           Looks like you haven't added anything to your cart yet.
         </p>
         <Link
@@ -57,7 +57,7 @@ export function Cart() {
                   delay: index * 0.1
                 }}
                 key={item.product.id}
-                className="flex gap-6 p-4 sm:p-6 bg-surface border border-white/5 rounded-3xl">
+                className="flex gap-6 p-4 sm:p-6 bg-surface border border-black/5 dark:border-white/5 rounded-3xl">
                 
                 <Link
                   to={`/product/${item.product.slug}`}
@@ -75,33 +75,33 @@ export function Cart() {
                     <div>
                       <Link
                         to={`/product/${item.product.slug}`}
-                        className="text-lg font-medium text-white hover:text-accent transition-colors line-clamp-1">
+                        className="text-lg font-medium text-fg hover:text-accent transition-colors line-clamp-1">
                         
                         {item.product.name}
                       </Link>
-                      <p className="text-sm text-zinc-500 mt-1">
+                      <p className="text-sm text-muted mt-1">
                         {item.product.categoryName}
                       </p>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.product.id)}
-                      className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-full transition-colors">
+                      className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-full transition-colors">
                       
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
 
                   <div className="flex items-center justify-between mt-4">
-                    <div className="flex items-center bg-background border border-white/10 rounded-full p-1">
+                    <div className="flex items-center bg-background border border-black/10 dark:border-white/10 rounded-full p-1">
                       <button
                         onClick={() =>
                         updateQuantity(item.product.id, item.quantity - 1)
                         }
-                        className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-colors">
+                        className="w-8 h-8 flex items-center justify-center text-muted hover:text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors">
                         
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="w-10 text-center text-white text-sm font-medium">
+                      <span className="w-10 text-center text-fg text-sm font-medium">
                         {item.quantity}
                       </span>
                       <button
@@ -111,20 +111,20 @@ export function Cart() {
                           Math.min(item.product.stock, item.quantity + 1)
                         )
                         }
-                        className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-colors">
+                        className="w-8 h-8 flex items-center justify-center text-muted hover:text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors">
                         
                         <Plus className="w-4 h-4" />
                       </button>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-semibold text-white">
+                      <div className="text-lg font-semibold text-fg">
                         {formatCurrency(
                           price * item.quantity,
                           settings.currency
                         )}
                       </div>
                       {item.quantity > 1 &&
-                      <div className="text-xs text-zinc-500 mt-1">
+                      <div className="text-xs text-muted mt-1">
                           {formatCurrency(price, settings.currency)} each
                         </div>
                       }
@@ -139,26 +139,26 @@ export function Cart() {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="glass-card rounded-3xl p-8 sticky top-32">
-            <h3 className="text-xl font-serif text-white mb-6">
+            <h3 className="text-xl font-serif text-fg mb-6">
               Order Summary
             </h3>
 
             <div className="space-y-4 mb-8">
-              <div className="flex justify-between text-zinc-400">
+              <div className="flex justify-between text-muted">
                 <span>Subtotal</span>
-                <span className="text-white">
+                <span className="text-fg">
                   {formatCurrency(subtotal, settings.currency)}
                 </span>
               </div>
-              <div className="flex justify-between text-zinc-400">
+              <div className="flex justify-between text-muted">
                 <span>Shipping</span>
-                <span className="text-white">Calculated at checkout</span>
+                <span className="text-fg">Calculated at checkout</span>
               </div>
-              <div className="pt-4 border-t border-white/10 flex justify-between items-center">
-                <span className="text-white font-medium">
+              <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-between items-center">
+                <span className="text-fg font-medium">
                   Total (excl. shipping)
                 </span>
-                <span className="text-2xl font-semibold text-white">
+                <span className="text-2xl font-semibold text-fg">
                   {formatCurrency(subtotal, settings.currency)}
                 </span>
               </div>
@@ -173,7 +173,7 @@ export function Cart() {
 
             <Link
               to="/shop"
-              className="w-full py-4 bg-transparent border border-white/10 text-white font-medium rounded-full hover:bg-white/5 transition-colors flex items-center justify-center">
+              className="w-full py-4 bg-transparent border border-black/10 dark:border-white/10 text-fg font-medium rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center">
               
               Continue Shopping
             </Link>

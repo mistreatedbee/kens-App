@@ -41,8 +41,8 @@ export function AdminProducts() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-serif text-white mb-2">Products</h1>
-          <p className="text-zinc-400">Manage your store inventory.</p>
+          <h1 className="text-3xl font-serif text-fg mb-2">Products</h1>
+          <p className="text-muted">Manage your store inventory.</p>
         </div>
         <Link
           to="/admin/products/new"
@@ -56,19 +56,19 @@ export function AdminProducts() {
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
             <input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-2.5 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+              className="w-full pl-12 pr-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
             
           </div>
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2.5 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors appearance-none sm:w-48 cursor-pointer">
+            className="px-4 py-2.5 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors appearance-none sm:w-48 cursor-pointer">
             
             <option value="all">All Categories</option>
             {categories.map((c) =>
@@ -82,7 +82,7 @@ export function AdminProducts() {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="text-zinc-400 border-b border-white/10">
+            <thead className="text-muted border-b border-black/10 dark:border-white/10">
               <tr>
                 <th className="pb-4 font-medium px-4">Product</th>
                 <th className="pb-4 font-medium px-4">Category</th>
@@ -92,12 +92,12 @@ export function AdminProducts() {
                 <th className="pb-4 font-medium px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-black/5 dark:divide-white/5">
               {filteredProducts.length > 0 ?
               filteredProducts.map((product) =>
               <tr
                 key={product.id}
-                className="group hover:bg-white/[0.02] transition-colors">
+                className="group hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
                 
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
@@ -107,10 +107,10 @@ export function AdminProducts() {
                       className="w-10 h-10 rounded-lg object-cover bg-zinc-900 shrink-0" />
                     
                         <div>
-                          <div className="font-medium text-white">
+                          <div className="font-medium text-fg">
                             {product.name}
                           </div>
-                          <div className="text-xs text-zinc-500 flex gap-2 mt-1">
+                          <div className="text-xs text-muted flex gap-2 mt-1">
                             {product.isFeatured &&
                         <span className="text-accent">Featured</span>
                         }
@@ -121,10 +121,10 @@ export function AdminProducts() {
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-zinc-300">
+                    <td className="py-4 px-4 text-muted">
                       {product.categoryName}
                     </td>
-                    <td className="py-4 px-4 text-white">
+                    <td className="py-4 px-4 text-fg">
                       {product.discountPrice ?
                   <div>
                           <span>
@@ -133,7 +133,7 @@ export function AdminProducts() {
                         settings.currency
                       )}
                           </span>
-                          <span className="text-xs text-zinc-500 line-through ml-2">
+                          <span className="text-xs text-muted line-through ml-2">
                             {formatCurrency(product.price, settings.currency)}
                           </span>
                         </div> :
@@ -153,7 +153,7 @@ export function AdminProducts() {
                     onClick={() =>
                     toggleStatus(product.id, product.isActive)
                     }
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${product.isActive ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'}`}>
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${product.isActive ? 'bg-black/10 dark:bg-white/10 text-fg hover:bg-black/10 dark:hover:bg-white/20' : 'bg-zinc-800 text-muted hover:bg-zinc-700'}`}>
                     
                         {product.isActive ?
                     <Eye className="w-3 h-3" /> :
@@ -167,14 +167,14 @@ export function AdminProducts() {
                       <div className="flex items-center justify-end gap-2">
                         <Link
                       to={`/admin/products/${product.id}`}
-                      className="p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      className="p-2 text-muted hover:text-fg hover:bg-black/10 dark:hover:bg-white/10 rounded-lg transition-colors"
                       title="Edit">
                       
                           <Edit className="w-4 h-4" />
                         </Link>
                         <button
                       onClick={() => handleDelete(product.id, product.name)}
-                      className="p-2 text-zinc-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                      className="p-2 text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                       title="Delete">
                       
                           <Trash2 className="w-4 h-4" />
@@ -185,7 +185,7 @@ export function AdminProducts() {
               ) :
 
               <tr>
-                  <td colSpan={6} className="py-12 text-center text-zinc-500">
+                  <td colSpan={6} className="py-12 text-center text-muted">
                     No products found.
                   </td>
                 </tr>

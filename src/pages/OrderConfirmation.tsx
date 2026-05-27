@@ -40,28 +40,28 @@ export function OrderConfirmation() {
           <CheckCircle className="w-10 h-10" />
         </div>
 
-        <h1 className="text-4xl font-serif text-white mb-4">
+        <h1 className="text-4xl font-serif text-fg mb-4">
           Order Confirmed!
         </h1>
-        <p className="text-zinc-400 text-lg mb-2">
+        <p className="text-muted text-lg mb-2">
           Thank you for your order, {order.customerName}.
         </p>
-        <p className="text-zinc-500 mb-8">
+        <p className="text-muted mb-8">
           Order Number:{' '}
-          <span className="text-white font-medium">{order.orderNumber}</span>
+          <span className="text-fg font-medium">{order.orderNumber}</span>
         </p>
 
-        <div className="bg-background rounded-2xl p-6 text-left mb-8 border border-white/5">
-          <h3 className="text-white font-medium mb-4 border-b border-white/10 pb-2">
+        <div className="bg-background rounded-2xl p-6 text-left mb-8 border border-black/5 dark:border-white/5">
+          <h3 className="text-fg font-medium mb-4 border-b border-black/10 dark:border-white/10 pb-2">
             Order Summary
           </h3>
           <div className="space-y-3 mb-4">
             {order.items.map((item, idx) =>
             <div key={idx} className="flex justify-between text-sm">
-                <span className="text-zinc-400">
+                <span className="text-muted">
                   {item.quantity}x {item.name}
                 </span>
-                <span className="text-white">
+                <span className="text-fg">
                   {formatCurrency(
                   item.price * item.quantity,
                   settings.currency
@@ -70,16 +70,16 @@ export function OrderConfirmation() {
               </div>
             )}
           </div>
-          <div className="flex justify-between items-center pt-4 border-t border-white/10">
-            <span className="text-white font-medium">Total</span>
-            <span className="text-xl font-semibold text-white">
+          <div className="flex justify-between items-center pt-4 border-t border-black/10 dark:border-white/10">
+            <span className="text-fg font-medium">Total</span>
+            <span className="text-xl font-semibold text-fg">
               {formatCurrency(order.total, settings.currency)}
             </span>
           </div>
         </div>
 
         <div className="space-y-4">
-          <p className="text-sm text-zinc-400 mb-4">
+          <p className="text-sm text-muted mb-4">
             To complete your order and arrange payment/delivery, please send
             your order details to us on WhatsApp.
           </p>
@@ -96,7 +96,7 @@ export function OrderConfirmation() {
 
           <Link
             to="/shop"
-            className="w-full py-4 bg-surface border border-white/10 text-white font-medium rounded-full hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
+            className="w-full py-4 bg-surface border border-black/10 dark:border-white/10 text-fg font-medium rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
             
             <ShoppingBag className="w-5 h-5" />
             Continue Shopping

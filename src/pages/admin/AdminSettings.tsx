@@ -41,8 +41,8 @@ export function AdminSettings() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
       <div>
-        <h1 className="text-3xl font-serif text-white mb-2">Store Settings</h1>
-        <p className="text-zinc-400">
+        <h1 className="text-3xl font-serif text-fg mb-2">Store Settings</h1>
+        <p className="text-muted">
           Manage your store's public information and preferences.
         </p>
       </div>
@@ -50,33 +50,33 @@ export function AdminSettings() {
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* General Info */}
         <div className="glass-card p-6 rounded-2xl space-y-6">
-          <h2 className="text-xl font-medium text-white mb-4 flex items-center gap-2">
-            <Store className="w-5 h-5 text-zinc-400" /> General Information
+          <h2 className="text-xl font-medium text-fg mb-4 flex items-center gap-2">
+            <Store className="w-5 h-5 text-muted" /> General Information
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">Store Name *</label>
+              <label className="text-sm text-muted">Store Name *</label>
               <input
                 required
                 type="text"
                 name="storeName"
                 value={formData.storeName}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">Currency Symbol</label>
+              <label className="text-sm text-muted">Currency Symbol</label>
               <div className="relative">
-                <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   required
                   type="text"
                   name="currency"
                   value={formData.currency}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
               </div>
             </div>
@@ -85,13 +85,13 @@ export function AdminSettings() {
 
         {/* Contact Info */}
         <div className="glass-card p-6 rounded-2xl space-y-6">
-          <h2 className="text-xl font-medium text-white mb-4 flex items-center gap-2">
-            <Phone className="w-5 h-5 text-zinc-400" /> Contact Details
+          <h2 className="text-xl font-medium text-fg mb-4 flex items-center gap-2">
+            <Phone className="w-5 h-5 text-muted" /> Contact Details
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">
+              <label className="text-sm text-muted">
                 WhatsApp Number (for orders) *
               </label>
               <input
@@ -101,14 +101,14 @@ export function AdminSettings() {
                 value={formData.whatsappNumber}
                 onChange={handleChange}
                 placeholder="+1234567890"
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-muted">
                 Include country code (e.g. +1)
               </p>
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">
+              <label className="text-sm text-muted">
                 General Phone Number
               </label>
               <input
@@ -116,32 +116,32 @@ export function AdminSettings() {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm text-zinc-400">Email Address</label>
+              <label className="text-sm text-muted">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
               </div>
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm text-zinc-400">Physical Address</label>
+              <label className="text-sm text-muted">Physical Address</label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-zinc-500" />
+                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-muted" />
                 <textarea
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   rows={2}
-                  className="w-full pl-10 pr-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none" />
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none" />
                 
               </div>
             </div>
@@ -150,13 +150,13 @@ export function AdminSettings() {
 
         {/* Additional Info */}
         <div className="glass-card p-6 rounded-2xl space-y-6">
-          <h2 className="text-xl font-medium text-white mb-4 flex items-center gap-2">
-            <Share2 className="w-5 h-5 text-zinc-400" /> Additional Information
+          <h2 className="text-xl font-medium text-fg mb-4 flex items-center gap-2">
+            <Share2 className="w-5 h-5 text-muted" /> Additional Information
           </h2>
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">
+              <label className="text-sm text-muted">
                 Delivery Information (shown in footer)
               </label>
               <textarea
@@ -164,12 +164,12 @@ export function AdminSettings() {
                 value={formData.deliveryInfo}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none" />
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none" />
               
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">
+              <label className="text-sm text-muted">
                 Footer Text (Copyright)
               </label>
               <input
@@ -177,7 +177,7 @@ export function AdminSettings() {
                 name="footerText"
                 value={formData.footerText}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               
             </div>
           </div>

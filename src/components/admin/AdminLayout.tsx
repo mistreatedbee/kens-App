@@ -13,14 +13,14 @@ export function AdminLayout() {
       <AdminSidebar />
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface border-b border-white/5 z-40 flex items-center justify-between px-4">
-        <h2 className="text-lg font-serif text-white flex items-center gap-2">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface border-b border-black/5 dark:border-white/5 z-40 flex items-center justify-between px-4">
+        <h2 className="text-lg font-serif text-fg flex items-center gap-2">
           <Store className="w-4 h-4 text-accent" />
           {settings.storeName}
         </h2>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 text-zinc-400 hover:text-white">
+          className="p-2 text-muted hover:text-fg">
           
           {isMobileMenuOpen ?
           <X className="w-6 h-6" /> :
@@ -37,35 +37,35 @@ export function AdminLayout() {
             <Link
             to="/admin"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-white hover:bg-white/5 rounded-xl">
+            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
             
               Dashboard
             </Link>
             <Link
             to="/admin/products"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-white hover:bg-white/5 rounded-xl">
+            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
             
               Products
             </Link>
             <Link
             to="/admin/categories"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-white hover:bg-white/5 rounded-xl">
+            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
             
               Categories
             </Link>
             <Link
             to="/admin/orders"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-white hover:bg-white/5 rounded-xl">
+            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
             
               Orders
             </Link>
             <Link
             to="/admin/settings"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-white hover:bg-white/5 rounded-xl">
+            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
             
               Settings
             </Link>

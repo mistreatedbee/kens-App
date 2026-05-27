@@ -22,10 +22,10 @@ export function Contact() {
         {/* Contact Info */}
         <div className="space-y-12">
           <div className="prose prose-invert">
-            <h3 className="text-2xl font-serif text-white mb-4">
+            <h3 className="text-2xl font-serif text-fg mb-4">
               Get in touch
             </h3>
-            <p className="text-zinc-400 leading-relaxed">
+            <p className="text-muted leading-relaxed">
               Whether you have a question about our products, need help with an
               order, or just want to say hello, we're here for you.
             </p>
@@ -33,24 +33,24 @@ export function Contact() {
 
           <div className="space-y-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-accent">
+              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
                 <MapPin className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="text-white font-medium mb-1">Visit Us</h4>
-                <p className="text-zinc-400">{settings.address}</p>
+                <h4 className="text-fg font-medium mb-1">Visit Us</h4>
+                <p className="text-muted">{settings.address}</p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-accent">
+              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
                 <Mail className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="text-white font-medium mb-1">Email Us</h4>
+                <h4 className="text-fg font-medium mb-1">Email Us</h4>
                 <a
                   href={`mailto:${settings.email}`}
-                  className="text-zinc-400 hover:text-accent transition-colors">
+                  className="text-muted hover:text-accent transition-colors">
                   
                   {settings.email}
                 </a>
@@ -58,14 +58,14 @@ export function Contact() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-accent">
+              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
                 <Phone className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="text-white font-medium mb-1">Call Us</h4>
+                <h4 className="text-fg font-medium mb-1">Call Us</h4>
                 <a
                   href={`tel:${settings.phoneNumber}`}
-                  className="text-zinc-400 hover:text-accent transition-colors">
+                  className="text-muted hover:text-accent transition-colors">
                   
                   {settings.phoneNumber}
                 </a>
@@ -73,12 +73,12 @@ export function Contact() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-accent">
+              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
                 <Clock className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="text-white font-medium mb-1">Business Hours</h4>
-                <p className="text-zinc-400">
+                <h4 className="text-fg font-medium mb-1">Business Hours</h4>
+                <p className="text-muted">
                   Mon - Fri: 9:00 AM - 6:00 PM
                   <br />
                   Sat: 10:00 AM - 4:00 PM
@@ -90,36 +90,36 @@ export function Contact() {
 
         {/* Contact Form */}
         <div className="glass-card rounded-3xl p-8">
-          <h3 className="text-2xl font-serif text-white mb-6">
+          <h3 className="text-2xl font-serif text-fg mb-6">
             Send a Message
           </h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">Your Name</label>
+              <label className="text-sm text-muted">Your Name</label>
               <input
                 required
                 type="text"
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors"
                 placeholder="John Doe" />
               
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">Email Address</label>
+              <label className="text-sm text-muted">Email Address</label>
               <input
                 required
                 type="email"
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors"
                 placeholder="john@example.com" />
               
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm text-zinc-400">Message</label>
+              <label className="text-sm text-muted">Message</label>
               <textarea
                 required
                 rows={4}
-                className="w-full px-4 py-3 bg-background border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none"
+                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none"
                 placeholder="How can we help you?" />
               
             </div>

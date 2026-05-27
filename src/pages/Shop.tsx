@@ -83,13 +83,13 @@ export function Shop() {
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-8">
         {/* Search */}
         <div className="relative w-full md:w-96">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
           <input
             type="text"
             placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+            className="w-full pl-12 pr-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
           
         </div>
 
@@ -97,7 +97,7 @@ export function Shop() {
         <div className="flex items-center gap-4 w-full md:w-auto">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-colors flex-1 md:flex-none justify-center ${showFilters ? 'bg-accent text-black border-accent' : 'bg-surface border-white/10 text-white hover:border-white/20'}`}>
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-colors flex-1 md:flex-none justify-center ${showFilters ? 'bg-accent text-black border-accent' : 'bg-surface border-black/10 dark:border-white/10 text-fg hover:border-black/20 dark:hover:border-white/20'}`}>
             
             <SlidersHorizontal className="w-5 h-5" />
             <span className="font-medium">Filters</span>
@@ -106,7 +106,7 @@ export function Shop() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="px-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors appearance-none flex-1 md:flex-none cursor-pointer">
+            className="px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors appearance-none flex-1 md:flex-none cursor-pointer">
             
             <option value="latest">Latest Arrivals</option>
             <option value="trending">Trending</option>
@@ -134,12 +134,12 @@ export function Shop() {
           }}
           className="overflow-hidden mb-8">
           
-            <div className="p-6 bg-surface border border-white/10 rounded-2xl">
-              <h3 className="text-white font-medium mb-4">Categories</h3>
+            <div className="p-6 bg-surface border border-black/10 dark:border-white/10 rounded-2xl">
+              <h3 className="text-fg font-medium mb-4">Categories</h3>
               <div className="flex flex-wrap gap-2">
                 <button
                 onClick={() => handleCategoryChange('all')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all' ? 'bg-white text-black' : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'}`}>
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all' ? 'bg-white text-black' : 'bg-black/5 dark:bg-white/5 text-muted hover:bg-black/10 dark:hover:bg-white/10 hover:text-fg'}`}>
                 
                   All Products
                 </button>
@@ -149,7 +149,7 @@ export function Shop() {
               <button
                 key={category.id}
                 onClick={() => handleCategoryChange(category.slug)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === category.slug ? 'bg-white text-black' : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'}`}>
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === category.slug ? 'bg-white text-black' : 'bg-black/5 dark:bg-white/5 text-muted hover:bg-black/10 dark:hover:bg-white/10 hover:text-fg'}`}>
                 
                       {category.name}
                     </button>
@@ -161,7 +161,7 @@ export function Shop() {
       </AnimatePresence>
 
       {/* Results */}
-      <div className="mb-6 text-zinc-400 text-sm">
+      <div className="mb-6 text-muted text-sm">
         Showing {filteredAndSortedProducts.length} products
       </div>
 
@@ -173,13 +173,13 @@ export function Shop() {
         </div> :
 
       <div className="py-24 text-center glass-card rounded-3xl">
-          <div className="w-16 h-16 mx-auto bg-white/5 rounded-full flex items-center justify-center text-zinc-500 mb-4">
+          <div className="w-16 h-16 mx-auto bg-black/5 dark:bg-white/5 rounded-full flex items-center justify-center text-muted mb-4">
             <Search className="w-8 h-8" />
           </div>
-          <h3 className="text-xl font-medium text-white mb-2">
+          <h3 className="text-xl font-medium text-fg mb-2">
             No products found
           </h3>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-muted mb-6">
             Try adjusting your search or filters to find what you're looking
             for.
           </p>
@@ -188,7 +188,7 @@ export function Shop() {
             setSearchQuery('');
             handleCategoryChange('all');
           }}
-          className="px-6 py-3 bg-white/10 text-white rounded-full font-medium hover:bg-white/20 transition-colors">
+          className="px-6 py-3 bg-black/10 dark:bg-white/10 text-fg rounded-full font-medium hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
           
             Clear Filters
           </button>

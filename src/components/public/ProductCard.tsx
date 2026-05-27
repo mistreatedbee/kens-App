@@ -21,7 +21,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       to={`/product/${product.slug}`}
-      className="group relative flex flex-col glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/5 hover:border-white/10">
+      className="group relative flex flex-col glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/5 hover:border-black/10 dark:hover:border-white/10">
       
       {/* Image Container */}
       <div className="relative aspect-[4/5] overflow-hidden bg-zinc-900">
@@ -66,10 +66,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <div className="text-xs text-zinc-500 mb-2 uppercase tracking-wider font-medium">
+        <div className="text-xs text-muted mb-2 uppercase tracking-wider font-medium">
           {product.categoryName}
         </div>
-        <h3 className="text-lg font-medium text-zinc-100 mb-2 line-clamp-1 group-hover:text-accent transition-colors">
+        <h3 className="text-lg font-medium text-fg mb-2 line-clamp-1 group-hover:text-accent transition-colors">
           {product.name}
         </h3>
 
@@ -77,21 +77,21 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center gap-2">
             {product.discountPrice ?
             <>
-                <span className="text-lg font-semibold text-white">
+                <span className="text-lg font-semibold text-fg">
                   {formatCurrency(product.discountPrice, settings.currency)}
                 </span>
-                <span className="text-sm text-zinc-500 line-through">
+                <span className="text-sm text-muted line-through">
                   {formatCurrency(product.price, settings.currency)}
                 </span>
               </> :
 
-            <span className="text-lg font-semibold text-white">
+            <span className="text-lg font-semibold text-fg">
                 {formatCurrency(product.price, settings.currency)}
               </span>
             }
           </div>
 
-          <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center group-hover:bg-accent group-hover:text-black transition-colors">
+          <div className="w-8 h-8 rounded-full bg-zinc-800 text-white flex items-center justify-center group-hover:bg-accent group-hover:text-black transition-colors">
             <ArrowRight className="w-4 h-4" />
           </div>
         </div>

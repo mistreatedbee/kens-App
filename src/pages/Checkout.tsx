@@ -74,7 +74,7 @@ export function Checkout() {
     <div className="max-w-7xl mx-auto px-6 py-12">
       <button
         onClick={() => navigate('/cart')}
-        className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
+        className="inline-flex items-center gap-2 text-muted hover:text-fg mb-8 transition-colors">
         
         <ArrowLeft className="w-4 h-4" /> Back to Cart
       </button>
@@ -82,29 +82,29 @@ export function Checkout() {
       <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
         {/* Form */}
         <div>
-          <h1 className="text-4xl font-serif text-white mb-8">Checkout</h1>
+          <h1 className="text-4xl font-serif text-fg mb-8">Checkout</h1>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Contact Info */}
             <div className="space-y-4">
-              <h2 className="text-xl font-medium text-white border-b border-white/10 pb-2">
+              <h2 className="text-xl font-medium text-fg border-b border-black/10 dark:border-white/10 pb-2">
                 Contact Information
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm text-zinc-400">Full Name *</label>
+                  <label className="text-sm text-muted">Full Name *</label>
                   <input
                     required
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                    className="w-full px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                   
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm text-zinc-400">
+                  <label className="text-sm text-muted">
                     Phone Number *
                   </label>
                   <input
@@ -113,13 +113,13 @@ export function Checkout() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                    className="w-full px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                   
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">
+                <label className="text-sm text-muted">
                   Email Address (Optional)
                 </label>
                 <input
@@ -127,20 +127,20 @@ export function Checkout() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors" />
+                  className="w-full px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
               </div>
             </div>
 
             {/* Delivery Info */}
             <div className="space-y-4">
-              <h2 className="text-xl font-medium text-white border-b border-white/10 pb-2">
+              <h2 className="text-xl font-medium text-fg border-b border-black/10 dark:border-white/10 pb-2">
                 Delivery Method
               </h2>
 
               <div className="grid grid-cols-2 gap-4">
                 <label
-                  className={`cursor-pointer p-4 rounded-xl border transition-all ${formData.deliveryType === 'delivery' ? 'bg-accent/10 border-accent text-accent' : 'bg-surface border-white/10 text-white hover:border-white/20'}`}>
+                  className={`cursor-pointer p-4 rounded-xl border transition-all ${formData.deliveryType === 'delivery' ? 'bg-accent/10 border-accent text-accent' : 'bg-surface border-black/10 dark:border-white/10 text-fg hover:border-black/20 dark:hover:border-white/20'}`}>
                   
                   <input
                     type="radio"
@@ -154,7 +154,7 @@ export function Checkout() {
                   <div className="text-sm opacity-80">Ship to my address</div>
                 </label>
                 <label
-                  className={`cursor-pointer p-4 rounded-xl border transition-all ${formData.deliveryType === 'collection' ? 'bg-accent/10 border-accent text-accent' : 'bg-surface border-white/10 text-white hover:border-white/20'}`}>
+                  className={`cursor-pointer p-4 rounded-xl border transition-all ${formData.deliveryType === 'collection' ? 'bg-accent/10 border-accent text-accent' : 'bg-surface border-black/10 dark:border-white/10 text-fg hover:border-black/20 dark:hover:border-white/20'}`}>
                   
                   <input
                     type="radio"
@@ -171,7 +171,7 @@ export function Checkout() {
 
               {formData.deliveryType === 'delivery' &&
               <div className="space-y-2 mt-4 animate-in fade-in slide-in-from-top-2">
-                  <label className="text-sm text-zinc-400">
+                  <label className="text-sm text-muted">
                     Delivery Address *
                   </label>
                   <textarea
@@ -180,7 +180,7 @@ export function Checkout() {
                   value={formData.address}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none" />
+                  className="w-full px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none" />
                 
                 </div>
               }
@@ -188,11 +188,11 @@ export function Checkout() {
 
             {/* Additional Info */}
             <div className="space-y-4">
-              <h2 className="text-xl font-medium text-white border-b border-white/10 pb-2">
+              <h2 className="text-xl font-medium text-fg border-b border-black/10 dark:border-white/10 pb-2">
                 Additional Information
               </h2>
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400">
+                <label className="text-sm text-muted">
                   Order Notes (Optional)
                 </label>
                 <textarea
@@ -201,7 +201,7 @@ export function Checkout() {
                   onChange={handleChange}
                   rows={2}
                   placeholder="Special instructions for delivery..."
-                  className="w-full px-4 py-3 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent transition-colors resize-none" />
+                  className="w-full px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none" />
                 
               </div>
             </div>
@@ -214,7 +214,7 @@ export function Checkout() {
               {isSubmitting ? 'Processing...' : 'Place Order'}
             </button>
 
-            <div className="flex items-center justify-center gap-2 text-sm text-zinc-500">
+            <div className="flex items-center justify-center gap-2 text-sm text-muted">
               <ShieldCheck className="w-4 h-4" /> Secure checkout process
             </div>
           </form>
@@ -223,7 +223,7 @@ export function Checkout() {
         {/* Order Summary Sidebar */}
         <div className="lg:col-span-1">
           <div className="glass-card rounded-3xl p-8 sticky top-32">
-            <h3 className="text-xl font-serif text-white mb-6">
+            <h3 className="text-xl font-serif text-fg mb-6">
               Order Summary
             </h3>
 
@@ -243,10 +243,10 @@ export function Checkout() {
                       </span>
                     </div>
                     <div className="flex-grow">
-                      <h4 className="text-sm font-medium text-white line-clamp-2">
+                      <h4 className="text-sm font-medium text-fg line-clamp-2">
                         {item.product.name}
                       </h4>
-                      <p className="text-sm text-zinc-400 mt-1">
+                      <p className="text-sm text-muted mt-1">
                         {formatCurrency(
                           price * item.quantity,
                           settings.currency
@@ -258,24 +258,24 @@ export function Checkout() {
               })}
             </div>
 
-            <div className="space-y-4 pt-6 border-t border-white/10">
-              <div className="flex justify-between text-zinc-400">
+            <div className="space-y-4 pt-6 border-t border-black/10 dark:border-white/10">
+              <div className="flex justify-between text-muted">
                 <span>Subtotal</span>
-                <span className="text-white">
+                <span className="text-fg">
                   {formatCurrency(subtotal, settings.currency)}
                 </span>
               </div>
-              <div className="flex justify-between text-zinc-400">
+              <div className="flex justify-between text-muted">
                 <span>Shipping</span>
-                <span className="text-white">
+                <span className="text-fg">
                   {formData.deliveryType === 'collection' ?
                   'Free' :
                   'Calculated after order'}
                 </span>
               </div>
-              <div className="pt-4 border-t border-white/10 flex justify-between items-center">
-                <span className="text-white font-medium">Total</span>
-                <span className="text-2xl font-semibold text-white">
+              <div className="pt-4 border-t border-black/10 dark:border-white/10 flex justify-between items-center">
+                <span className="text-fg font-medium">Total</span>
+                <span className="text-2xl font-semibold text-fg">
                   {formatCurrency(subtotal, settings.currency)}
                 </span>
               </div>
