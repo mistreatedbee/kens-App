@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { Menu, X, Store } from 'lucide-react';
+import { BarChart3, Menu, Settings, ShoppingCart, Store, Tags, Users, X, Package } from 'lucide-react';
 import { AdminSidebar } from './AdminSidebar';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
@@ -11,13 +11,22 @@ export function AdminLayout() {
   useEffect(() => {
     if (isAuthenticated) refreshOrders();
   }, [isAuthenticated, refreshOrders]);
+  const mobileLinks = [
+    { to: '/admin', label: 'Dashboard', icon: Store },
+    { to: '/admin/products', label: 'Products', icon: Package },
+    { to: '/admin/categories', label: 'Categories', icon: Tags },
+    { to: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+    { to: '/admin/customers', label: 'Customers', icon: Users },
+    { to: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+    { to: '/admin/settings', label: 'Settings', icon: Settings },
+  ];
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-surface flex">
       <AdminSidebar />
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface border-b border-black/5 dark:border-white/5 z-40 flex items-center justify-between px-4">
-        <h2 className="text-lg font-serif text-fg flex items-center gap-2">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-primary/10 z-40 flex items-center justify-between px-4">
+        <h2 className="text-lg font-bold text-primary flex items-center gap-2">
           <Store className="w-4 h-4 text-accent" />
           {settings.storeName}
         </h2>
@@ -35,43 +44,19 @@ export function AdminLayout() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen &&
-      <div className="md:hidden fixed inset-0 top-16 bg-surface z-40 p-4 flex flex-col">
+      <div className="md:hidden fixed inset-0 top-16 bg-white z-40 p-4 flex flex-col">
           <nav className="space-y-2 flex-1">
-            <Link
-            to="/admin"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
-            
-              Dashboard
-            </Link>
-            <Link
-            to="/admin/products"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
-            
-              Products
-            </Link>
-            <Link
-            to="/admin/categories"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
-            
-              Categories
-            </Link>
-            <Link
-            to="/admin/orders"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
-            
-              Orders
-            </Link>
-            <Link
-            to="/admin/settings"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block p-4 text-fg hover:bg-black/5 dark:hover:bg-white/5 rounded-xl">
-            
-              Settings
-            </Link>
+            {mobileLinks.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-4 text-fg hover:bg-lightblue/15 hover:text-primary rounded-xl"
+              >
+                <item.icon className="h-5 w-5" />
+                {item.label}
+              </Link>
+            ))}
           </nav>
           <button
           onClick={() => {

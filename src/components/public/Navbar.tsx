@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Menu, X, Search, Sun, Moon, Phone, ChevronDown } from 'lucide-react';
+import { Menu, MessageCircle, Search, ShoppingBag, X } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useCart } from '../../context/CartContext';
-import { useTheme } from '../../context/ThemeContext';
-import { AnimatePresence, motion } from 'framer-motion';
+import { buildGeneralContactUrl } from '../../lib/whatsapp';
+
+const navLinks = [
+  { name: 'Home', path: '/' },
+  { name: 'Pest Control', path: '/services/pest-control' },
+  { name: 'Cleaning Products', path: '/services/cleaning-products' },
+  { name: 'Fragrances', path: '/services/fragrances' },
+  { name: 'Shop', path: '/shop' },
+  { name: 'Contact', path: '/contact' },
+];
 
 export function Navbar() {
-  const { settings, categories } = useStore();
+  const { settings } = useStore();
   const { itemCount } = useCart();
-  const { theme, toggle } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const activeCategories = categories.filter((category) => category.isActive);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 12);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -26,13 +32,6 @@ export function Navbar() {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
-
-  const navLinks = [
-    { name: 'Home',       path: '/'          },
-    { name: 'Shop',       path: '/shop'       },
-    { name: 'Categories', path: '/categories' },
-    { name: 'Contact',    path: '/contact'    },
-  ];
 
   const submitSearch = (event: React.FormEvent) => {
     event.preventDefault();
@@ -42,54 +41,27 @@ export function Navbar() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 inset-x-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-background/95 backdrop-blur-lg border-b border-black/5 dark:border-white/5'
-            : 'bg-background/90 backdrop-blur-md'
-        }`}
-      >
-        <div className="border-b border-black/5 dark:border-white/5">
-          <div className="max-w-7xl mx-auto px-6 h-9 flex items-center justify-between text-xs text-muted">
-            <span>Easy ordering. No account required.</span>
-            <a href={`tel:${settings.phoneNumber}`} className="hidden sm:flex items-center gap-2 hover:text-fg">
-              <Phone className="w-3.5 h-3.5" />
+      <header className={`fixed inset-x-0 top-0 z-40 border-b border-primary/10 bg-white transition-shadow ${isScrolled ? 'shadow-lg shadow-primary/5' : ''}`}>
+        <div className="bg-primary text-white">
+          <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-6 text-xs">
+            <span>Kenmok CC · Professional pest control, cleaning products and fragrances</span>
+            <a href={`tel:${settings.phoneNumber}`} className="hidden font-semibold hover:text-accent sm:inline">
               {settings.phoneNumber}
             </a>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 py-4 grid grid-cols-[auto_1fr_auto] gap-4 items-center">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-serif text-fg tracking-wide">
-            {settings.storeName}
+        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4">
+          <Link to="/" className="flex items-center gap-3">
+            <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="h-12 w-auto" />
           </Link>
 
-          <form onSubmit={submitSearch} className="hidden lg:flex items-center min-w-0">
-            <Link
-              to="/categories"
-              className="h-11 px-4 bg-surface border border-r-0 border-black/10 dark:border-white/10 rounded-l-xl text-sm text-fg flex items-center gap-2 whitespace-nowrap hover:text-accent"
-            >
-              Categories <ChevronDown className="w-4 h-4" />
-            </Link>
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-              <input
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search products..."
-                className="w-full h-11 pl-12 pr-4 bg-surface border border-black/10 dark:border-white/10 rounded-r-xl text-fg focus:outline-none focus:border-accent"
-              />
-            </div>
-          </form>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex lg:hidden items-center gap-8">
+          <nav className="hidden items-center justify-center gap-5 lg:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-accent ${
-                  location.pathname === link.path ? 'text-accent' : 'text-muted'
+                className={`text-sm font-semibold transition-colors hover:text-secondary ${
+                  location.pathname === link.path ? 'text-secondary' : 'text-muted'
                 }`}
               >
                 {link.name}
@@ -97,134 +69,80 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1">
-            <Link to="/shop" className="p-2 text-muted hover:text-fg transition-colors">
-              <Search className="w-5 h-5" />
-            </Link>
-
-            {/* Theme toggle */}
-            <button
-              onClick={toggle}
-              aria-label="Toggle theme"
-              className="p-2 text-muted hover:text-fg transition-colors"
+          <div className="flex items-center justify-end gap-2">
+            <form onSubmit={submitSearch} className="hidden xl:block">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                <input
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search"
+                  className="h-10 w-44 rounded-full border border-primary/10 bg-surface pl-9 pr-4 text-sm outline-none focus:border-secondary"
+                />
+              </div>
+            </form>
+            <a
+              href={buildGeneralContactUrl(settings)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent md:inline-flex"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {theme === 'dark' ? (
-                  <motion.span
-                    key="sun"
-                    initial={{ opacity: 0, rotate: -90, scale: 0.7 }}
-                    animate={{ opacity: 1, rotate: 0,   scale: 1   }}
-                    exit={{    opacity: 0, rotate:  90, scale: 0.7 }}
-                    transition={{ duration: 0.18 }}
-                    className="block"
-                  >
-                    <Sun className="w-5 h-5" />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="moon"
-                    initial={{ opacity: 0, rotate:  90, scale: 0.7 }}
-                    animate={{ opacity: 1, rotate:  0,  scale: 1   }}
-                    exit={{    opacity: 0, rotate: -90, scale: 0.7 }}
-                    transition={{ duration: 0.18 }}
-                    className="block"
-                  >
-                    <Moon className="w-5 h-5" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-
-            <Link
-              to="/cart"
-              className="relative p-2 text-muted hover:text-fg transition-colors group"
-            >
-              <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
+            <Link to="/cart" className="relative rounded-full p-2 text-primary transition-colors hover:bg-surface">
+              <ShoppingBag className="h-5 w-5" />
               {itemCount > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-accent text-black text-[10px] font-bold flex items-center justify-center rounded-full">
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-xs font-bold text-white">
                   {itemCount}
                 </span>
               )}
             </Link>
-
             <button
-              className="md:hidden p-2 text-muted hover:text-fg"
+              className="rounded-full p-2 text-primary hover:bg-surface lg:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="h-6 w-6" />
             </button>
           </div>
         </div>
-        {activeCategories.length > 0 && (
-          <div className="hidden lg:block border-t border-black/5 dark:border-white/5">
-            <div className="max-w-7xl mx-auto px-6 h-11 flex items-center gap-6 overflow-x-auto text-sm">
-              {activeCategories.slice(0, 8).map((category) => (
-                <Link key={category.id} to={`/shop?category=${category.slug}`} className="text-muted hover:text-accent whitespace-nowrap">
-                  {category.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 md:hidden"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-surface border-l border-black/10 dark:border-white/10 z-50 p-6 flex flex-col md:hidden"
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm lg:hidden">
+          <div className="ml-auto flex h-full w-4/5 max-w-sm flex-col bg-white p-6 shadow-2xl">
+            <div className="mb-10 flex items-center justify-between">
+              <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="h-12 w-auto" />
+              <button onClick={() => setIsMobileMenuOpen(false)} className="rounded-full bg-surface p-2 text-primary">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`rounded-lg px-4 py-3 font-semibold ${
+                    location.pathname === link.path ? 'bg-primary text-white' : 'text-muted hover:bg-surface hover:text-primary'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+            <a
+              href={buildGeneralContactUrl(settings)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 font-semibold text-white"
             >
-              <div className="flex items-center justify-between mb-12">
-                <span className="text-xl font-serif text-fg">{settings.storeName}</span>
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-muted hover:text-fg bg-black/5 dark:bg-white/5 rounded-full"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <nav className="flex flex-col gap-6">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`text-lg font-medium transition-colors ${
-                      location.pathname === link.path ? 'text-accent' : 'text-muted'
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="mt-auto pt-8 border-t border-black/10 dark:border-white/10 flex items-center justify-between">
-                <span className="text-sm text-muted">{settings.storeName}</span>
-                <button
-                  onClick={toggle}
-                  className="flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"
-                >
-                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                  {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp Kenmok
+            </a>
+          </div>
+        </div>
+      )}
     </>
   );
 }

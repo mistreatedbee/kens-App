@@ -31,36 +31,36 @@ export function AdminDashboard() {
     name: 'Total Products',
     value: totalProducts,
     icon: Package,
-    color: 'text-blue-400',
-    bg: 'bg-blue-400/10'
+    color: 'text-primary',
+    bg: 'bg-lightblue/20'
   },
   {
     name: 'Categories',
     value: totalCategories,
     icon: Tags,
-    color: 'text-purple-400',
-    bg: 'bg-purple-400/10'
+    color: 'text-secondary',
+    bg: 'bg-lightblue/20'
   },
   {
     name: 'Total Orders',
     value: totalOrders,
     icon: ShoppingCart,
-    color: 'text-green-400',
-    bg: 'bg-green-400/10'
+    color: 'text-accent',
+    bg: 'bg-accent/10'
   },
   {
     name: 'Pending Orders',
     value: pendingOrders,
     icon: AlertCircle,
-    color: 'text-amber-400',
-    bg: 'bg-amber-400/10'
+    color: 'text-secondary',
+    bg: 'bg-secondary/10'
   },
   {
     name: 'Completed',
     value: completedOrders,
     icon: ShoppingCart,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-400/10'
+    color: 'text-accent',
+    bg: 'bg-accent/10'
   }];
 
   return (
@@ -69,26 +69,26 @@ export function AdminDashboard() {
         <h1 className="text-3xl font-serif text-fg mb-2">
           Dashboard Overview
         </h1>
-        <p className="text-muted">Welcome back to your store admin.</p>
+        <p className="text-muted">Welcome back to your Kenmok CC business admin.</p>
       </div>
 
       {/* Quick Actions */}
       <div className="flex gap-4 overflow-x-auto pb-2">
         <Link
           to="/admin/products/new"
-          className="px-4 py-2 bg-accent text-black font-medium rounded-lg hover:bg-white transition-colors whitespace-nowrap">
+          className="px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-accent transition-colors whitespace-nowrap">
           
           + Add Product
         </Link>
         <Link
           to="/admin/categories"
-          className="px-4 py-2 bg-surface border border-black/10 dark:border-white/10 text-fg font-medium rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors whitespace-nowrap">
+          className="px-4 py-2 bg-white border border-primary/10 text-fg font-medium rounded-lg hover:bg-lightblue/15 transition-colors whitespace-nowrap">
           
           Manage Categories
         </Link>
         <Link
           to="/admin/orders"
-          className="px-4 py-2 bg-surface border border-black/10 dark:border-white/10 text-fg font-medium rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors whitespace-nowrap">
+          className="px-4 py-2 bg-white border border-primary/10 text-fg font-medium rounded-lg hover:bg-lightblue/15 transition-colors whitespace-nowrap">
           
           View Orders
         </Link>
@@ -97,7 +97,7 @@ export function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
         {stats.map((stat, i) =>
-        <div key={i} className="glass-card p-6 rounded-2xl">
+        <div key={i} className="bg-white border border-primary/10 shadow-sm p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
               <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
@@ -115,7 +115,7 @@ export function AdminDashboard() {
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Recent Orders */}
-        <div className="lg:col-span-2 glass-card rounded-2xl p-6">
+        <div className="lg:col-span-2 bg-white border border-primary/10 shadow-sm rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-medium text-fg">Recent Orders</h2>
             <Link
@@ -175,7 +175,7 @@ export function AdminDashboard() {
         </div>
 
         {/* Low Stock Alerts */}
-        <div className="glass-card rounded-2xl p-6">
+        <div className="bg-white border border-primary/10 shadow-sm rounded-2xl p-6">
           <h2 className="text-xl font-medium text-fg mb-6 flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-amber-400" /> Low Stock
           </h2>

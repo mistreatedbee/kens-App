@@ -16,6 +16,7 @@ import { Cart } from './pages/Cart';
 import { Checkout } from './pages/Checkout';
 import { OrderConfirmation } from './pages/OrderConfirmation';
 import { Contact } from './pages/Contact';
+import { ServiceDivision } from './pages/ServiceDivision';
 // Admin Components
 import { AdminLayout } from './components/admin/AdminLayout';
 import { ProtectedRoute } from './components/admin/ProtectedRoute';
@@ -27,6 +28,8 @@ import { AdminCategories } from './pages/admin/AdminCategories';
 import { AdminOrders } from './pages/admin/AdminOrders';
 import { AdminOrderDetail } from './pages/admin/AdminOrderDetail';
 import { AdminSettings } from './pages/admin/AdminSettings';
+import { AdminCustomers } from './pages/admin/AdminCustomers';
+import { AdminAnalytics } from './pages/admin/AdminAnalytics';
 export function App() {
   return (
     <BrowserRouter>
@@ -41,6 +44,7 @@ export function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/categories" element={<Categories />} />
+                <Route path="/services/:slug" element={<ServiceDivision />} />
                 <Route path="/product/:slug" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
@@ -68,6 +72,8 @@ export function App() {
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="orders" element={<AdminOrders />} />
                 <Route path="orders/:id" element={<AdminOrderDetail />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
 

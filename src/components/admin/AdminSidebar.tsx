@@ -5,6 +5,8 @@ import {
   Package,
   Tags,
   ShoppingCart,
+  Users,
+  BarChart3,
   Settings,
   LogOut,
   Store } from
@@ -42,19 +44,29 @@ export function AdminSidebar() {
     icon: ShoppingCart
   },
   {
+    name: 'Customers',
+    path: '/admin/customers',
+    icon: Users
+  },
+  {
+    name: 'Analytics',
+    path: '/admin/analytics',
+    icon: BarChart3
+  },
+  {
     name: 'Settings',
     path: '/admin/settings',
     icon: Settings
   }];
 
   return (
-    <aside className="w-64 bg-surface border-r border-black/5 dark:border-white/5 h-screen sticky top-0 flex flex-col hidden md:flex">
-      <div className="p-6 border-b border-black/5 dark:border-white/5">
-        <h2 className="text-xl font-serif text-fg flex items-center gap-2">
+    <aside className="w-64 bg-white border-r border-primary/10 h-screen sticky top-0 flex flex-col hidden md:flex">
+      <div className="p-6 border-b border-primary/10">
+        <h2 className="text-xl font-bold text-primary flex items-center gap-2">
           <Store className="w-5 h-5 text-accent" />
           {settings.storeName}
         </h2>
-        <p className="text-xs text-muted mt-1">Admin Portal</p>
+        <p className="text-xs text-muted mt-1">Business Admin</p>
       </div>
 
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -64,7 +76,7 @@ export function AdminSidebar() {
           to={item.path}
           end={item.end}
           className={({ isActive }) =>
-          `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive ? 'bg-accent/10 text-accent font-medium' : 'text-muted hover:text-fg hover:bg-black/5 dark:hover:bg-white/5'}`
+          `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive ? 'bg-primary text-white font-medium' : 'text-muted hover:text-primary hover:bg-lightblue/15'}`
           }>
           
             <item.icon className="w-5 h-5" />
@@ -73,7 +85,7 @@ export function AdminSidebar() {
         )}
       </nav>
 
-      <div className="p-4 border-t border-black/5 dark:border-white/5">
+      <div className="p-4 border-t border-primary/10">
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors">

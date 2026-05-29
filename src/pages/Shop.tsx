@@ -94,7 +94,7 @@ export function Shop() {
             placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
+            className="w-full pl-12 pr-4 py-3 bg-surface border border-primary/15 rounded-xl text-fg focus:outline-none focus:border-secondary transition-colors" />
           
         </div>
 
@@ -102,7 +102,7 @@ export function Shop() {
         <div className="flex items-center gap-4 w-full md:w-auto">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-colors flex-1 md:flex-none justify-center ${showFilters ? 'bg-accent text-black border-accent' : 'bg-surface border-black/10 dark:border-white/10 text-fg hover:border-black/20 dark:hover:border-white/20'}`}>
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-colors flex-1 md:flex-none justify-center ${showFilters ? 'bg-primary text-white border-primary' : 'bg-surface border-primary/15 text-fg hover:border-secondary'}`}>
             
             <SlidersHorizontal className="w-5 h-5" />
             <span className="font-medium">Filters</span>
@@ -111,7 +111,7 @@ export function Shop() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="px-4 py-3 bg-surface border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors appearance-none flex-1 md:flex-none cursor-pointer">
+            className="px-4 py-3 bg-surface border border-primary/15 rounded-xl text-fg focus:outline-none focus:border-secondary transition-colors appearance-none flex-1 md:flex-none cursor-pointer">
             
             <option value="latest">Latest Arrivals</option>
             <option value="trending">Trending</option>
@@ -139,12 +139,12 @@ export function Shop() {
           }}
           className="overflow-hidden mb-8">
           
-            <div className="p-6 bg-surface border border-black/10 dark:border-white/10 rounded-2xl">
+            <div className="p-6 bg-surface border border-primary/15 rounded-2xl">
               <h3 className="text-fg font-medium mb-4">Categories</h3>
               <div className="flex flex-wrap gap-2">
                 <button
                 onClick={() => handleCategoryChange('all')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all' ? 'bg-white text-black' : 'bg-black/5 dark:bg-white/5 text-muted hover:bg-black/10 dark:hover:bg-white/10 hover:text-fg'}`}>
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all' ? 'bg-primary text-white' : 'bg-white text-muted hover:bg-lightblue/20 hover:text-primary'}`}>
                 
                   All Products
                 </button>
@@ -154,7 +154,7 @@ export function Shop() {
               <button
                 key={category.id}
                 onClick={() => handleCategoryChange(category.slug)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === category.slug ? 'bg-white text-black' : 'bg-black/5 dark:bg-white/5 text-muted hover:bg-black/10 dark:hover:bg-white/10 hover:text-fg'}`}>
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === category.slug ? 'bg-primary text-white' : 'bg-white text-muted hover:bg-lightblue/20 hover:text-primary'}`}>
                 
                       {category.name}
                     </button>

@@ -1,101 +1,84 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, ArrowRight } from 'lucide-react';
+import { ArrowRight, ShoppingCart } from 'lucide-react';
 import { Product, useStore } from '../../context/StoreContext';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../lib/format';
 import { toast } from 'sonner';
+
 interface ProductCardProps {
   product: Product;
 }
+
 export function ProductCard({ product }: ProductCardProps) {
   const { settings } = useStore();
   const { addToCart } = useCart();
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const isOutOfStock = product.stock <= 0;
+
+  const handleAddToCart = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     addToCart(product);
     toast.success(`Added ${product.name} to cart`);
   };
-  const isOutOfStock = product.stock <= 0;
+
   return (
     <Link
       to={`/product/${product.slug}`}
-      className="group relative flex flex-col glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/5 hover:border-black/10 dark:hover:border-white/10">
-      
-      {/* Image Container */}
-      <div className="relative aspect-[4/5] overflow-hidden bg-zinc-900">
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-primary/10 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-secondary/10"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden bg-surface">
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-        
-
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          {isOutOfStock &&
-          <span className="px-3 py-1 bg-red-500/90 text-white text-xs font-medium rounded-full backdrop-blur-md">
-              Out of Stock
-            </span>
-          }
-          {!isOutOfStock && product.isTrending &&
-          <span className="px-3 py-1 bg-accent/90 text-black text-xs font-medium rounded-full backdrop-blur-md">
-              Trending
-            </span>
-          }
-          {product.discountPrice &&
-          <span className="px-3 py-1 bg-white/90 text-black text-xs font-medium rounded-full backdrop-blur-md">
-              Sale
-            </span>
-          }
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {isOutOfStock && <span className="rounded-full bg-red-600 px-3 py-1 text-xs font-semibold text-white">Out of stock</span>}
+          {!isOutOfStock && product.isFeatured && <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">Featured</span>}
+          {product.discountPrice && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">Value offer</span>}
         </div>
-
-        {/* Quick Add Overlay */}
-        {!isOutOfStock &&
-        <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-            <button
-            onClick={handleAddToCart}
-            className="w-full py-3 bg-white/10 hover:bg-accent hover:text-black backdrop-blur-md border border-white/20 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors">
-            
-              <ShoppingCart className="w-4 h-4" />
-              Quick Add
-            </button>
-          </div>
-        }
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex flex-col flex-grow">
-        <div className="text-xs text-muted mb-2 uppercase tracking-wider font-medium">
-          {product.categoryName}
-        </div>
-        <h3 className="text-lg font-medium text-fg mb-2 line-clamp-1 group-hover:text-accent transition-colors">
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-xs font-bold uppercase tracking-wide text-secondary">{product.categoryName}</p>
+        <h3 className="mt-2 line-clamp-2 text-lg font-bold text-fg transition-colors group-hover:text-primary">
           {product.name}
         </h3>
+        <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">{product.description}</p>
 
-        <div className="mt-auto flex items-center justify-between pt-4">
-          <div className="flex items-center gap-2">
-            {product.discountPrice ?
-            <>
-                <span className="text-lg font-semibold text-fg">
+        <div className="mt-auto flex items-center justify-between gap-4 pt-5">
+          <div>
+            {product.discountPrice ? (
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-primary">
                   {formatCurrency(product.discountPrice, settings.currency)}
                 </span>
                 <span className="text-sm text-muted line-through">
                   {formatCurrency(product.price, settings.currency)}
                 </span>
-              </> :
-
-            <span className="text-lg font-semibold text-fg">
+              </div>
+            ) : (
+              <span className="text-lg font-bold text-primary">
                 {formatCurrency(product.price, settings.currency)}
               </span>
-            }
+            )}
           </div>
-
-          <div className="w-8 h-8 rounded-full bg-zinc-800 text-white flex items-center justify-center group-hover:bg-accent group-hover:text-black transition-colors">
-            <ArrowRight className="w-4 h-4" />
-          </div>
+          {!isOutOfStock ? (
+            <button
+              onClick={handleAddToCart}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-accent"
+              title="Add to cart"
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </button>
+          ) : (
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface text-muted">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          )}
         </div>
       </div>
-    </Link>);
-
+    </Link>
+  );
 }

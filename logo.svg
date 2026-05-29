@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
-  <rect width="100%" height="100%" fill="#111827" rx="16"/>
-  <text x="50%" y="55%" font-family="Inter, Arial, sans-serif" font-size="28" fill="#F59E0B" font-weight="700" text-anchor="middle" alignment-baseline="middle">Kens</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="120" viewBox="0 0 260 120" role="img" aria-labelledby="title">
+  <title id="title">Kenmok CC</title>
+  <rect width="260" height="120" rx="18" fill="#FFFFFF"/>
+  <circle cx="60" cy="60" r="34" fill="#005C99"/>
+  <path d="M42 77V43h10v13l19-13h16L62 60l27 17H72L52 64v13H42Z" fill="#FFFFFF"/>
+  <path d="M76 38c10 5 17 14 19 26-10-2-18-8-24-18 1-4 2-6 5-8Z" fill="#7AC943"/>
+  <text x="112" y="57" font-family="Poppins, Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#005C99">Kenmok</text>
+  <text x="114" y="82" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#7AC943" letter-spacing="2">CC</text>
 </svg>

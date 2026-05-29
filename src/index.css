@@ -1,5 +1,5 @@
 /* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
 
 /* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
 @import 'tailwindcss/base';
@@ -10,31 +10,37 @@
 
 /* ── Light mode (default) ──────────────────────────────── */
 :root {
-  --bg:         #F9F7F4;
-  --surface:    #EDEAE5;
-  --accent:     #FFB547;
-  --fg:         #0F0E0C;
-  --fg-muted:   #6B7280;
-  --border-col: rgba(0, 0, 0, 0.08);
+  --bg:         #FFFFFF;
+  --surface:    #F5F7FA;
+  --accent:     #7AC943;
+  --fg:         #1E293B;
+  --fg-muted:   #64748B;
+  --border-col: rgba(0, 92, 153, 0.12);
 }
 
 /* ── Dark mode ─────────────────────────────────────────── */
 .dark {
-  --bg:         #0A0A0B;
-  --surface:    #131316;
-  --accent:     #FFB547;
-  --fg:         #E4E4E7;
-  --fg-muted:   #71717A;
-  --border-col: rgba(255, 255, 255, 0.07);
+  --bg:         #FFFFFF;
+  --surface:    #F5F7FA;
+  --accent:     #7AC943;
+  --fg:         #1E293B;
+  --fg-muted:   #64748B;
+  --border-col: rgba(0, 92, 153, 0.12);
 }
 
 @layer base {
   body {
     @apply bg-background text-fg font-sans antialiased;
   }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
   ::selection {
-    background-color: rgba(255, 181, 71, 0.3);
-    color: #FFB547;
+    background-color: rgba(89, 208, 249, 0.35);
+    color: #005C99;
   }
 }
 
@@ -55,9 +61,9 @@
   }
 
   .glass-card {
-    background: var(--surface);
+    background: #FFFFFF;
     border: 1px solid var(--border-col);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 32px rgba(15, 122, 203, 0.08);
   }
 
   .dark .glass-card {

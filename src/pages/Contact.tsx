@@ -1,139 +1,88 @@
 import React from 'react';
-import { MapPin, Mail, Phone, MessageCircle, Clock } from 'lucide-react';
+import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { SectionHeading } from '../components/shared/SectionHeading';
 import { buildGeneralContactUrl } from '../lib/whatsapp';
+
 export function Contact() {
   const { settings } = useStore();
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, this would send an email. For now, we'll just show a toast or redirect to WhatsApp.
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     window.open(buildGeneralContactUrl(settings), '_blank');
   };
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <SectionHeading
-        title="Contact Us"
-        subtitle="We'd love to hear from you. Get in touch with our team."
-        centered />
-      
+    <div className="bg-background">
+      <section className="bg-surface px-6 py-16">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-sm font-bold uppercase tracking-wide text-secondary">Contact Kenmok CC</p>
+          <h1 className="mt-3 text-4xl font-bold text-fg md:text-5xl">Let us help you choose the right solution.</h1>
+          <p className="mx-auto mt-5 max-w-2xl leading-8 text-muted">
+            Send a service enquiry, request product guidance, or contact us directly through WhatsApp.
+          </p>
+        </div>
+      </section>
 
-      <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 mt-16">
-        {/* Contact Info */}
-        <div className="space-y-12">
-          <div className="prose prose-invert">
-            <h3 className="text-2xl font-serif text-fg mb-4">
-              Get in touch
-            </h3>
-            <p className="text-muted leading-relaxed">
-              Whether you have a question about our products, need help with an
-              order, or just want to say hello, we're here for you.
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
-                <MapPin className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-fg font-medium mb-1">Visit Us</h4>
-                <p className="text-muted">{settings.address}</p>
+      <section className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="space-y-5">
+          {[
+            { icon: MapPin, title: 'Location', value: settings.address },
+            { icon: Mail, title: 'Email', value: settings.email, href: `mailto:${settings.email}` },
+            { icon: Phone, title: 'Phone', value: settings.phoneNumber, href: `tel:${settings.phoneNumber}` },
+            { icon: Clock, title: 'Business hours', value: 'Monday to Friday, 08:00 - 17:00' },
+          ].map((item) => (
+            <div key={item.title} className="rounded-xl border border-primary/10 bg-white p-5">
+              <div className="flex gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-lightblue/20 text-primary">
+                  <item.icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-fg">{item.title}</h3>
+                  {item.href ? (
+                    <a href={item.href} className="mt-1 block text-muted hover:text-secondary">
+                      {item.value}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-muted">{item.value}</p>
+                  )}
+                </div>
               </div>
             </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
-                <Mail className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-fg font-medium mb-1">Email Us</h4>
-                <a
-                  href={`mailto:${settings.email}`}
-                  className="text-muted hover:text-accent transition-colors">
-                  
-                  {settings.email}
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
-                <Phone className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-fg font-medium mb-1">Call Us</h4>
-                <a
-                  href={`tel:${settings.phoneNumber}`}
-                  className="text-muted hover:text-accent transition-colors">
-                  
-                  {settings.phoneNumber}
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 text-accent">
-                <Clock className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-fg font-medium mb-1">Business Hours</h4>
-                <p className="text-muted">
-                  Mon - Fri: 9:00 AM - 6:00 PM
-                  <br />
-                  Sat: 10:00 AM - 4:00 PM
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Contact Form */}
-        <div className="glass-card rounded-3xl p-8">
-          <h3 className="text-2xl font-serif text-fg mb-6">
-            Send a Message
-          </h3>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm text-muted">Your Name</label>
-              <input
-                required
-                type="text"
-                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors"
-                placeholder="John Doe" />
-              
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-muted">Email Address</label>
-              <input
-                required
-                type="email"
-                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors"
-                placeholder="john@example.com" />
-              
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-muted">Message</label>
-              <textarea
-                required
-                rows={4}
-                className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors resize-none"
-                placeholder="How can we help you?" />
-              
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-4 bg-accent text-black font-semibold rounded-full hover:bg-white transition-colors flex items-center justify-center gap-2">
-              
-              <MessageCircle className="w-5 h-5" />
-              Send via WhatsApp
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>);
-
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-primary/10 bg-white p-6 shadow-xl shadow-secondary/10 md:p-8">
+          <h2 className="text-2xl font-bold text-fg">Send an enquiry</h2>
+          <p className="mt-2 text-muted">The form opens WhatsApp so Kenmok CC can respond quickly.</p>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <label className="space-y-2">
+              <span className="text-sm font-semibold text-fg">Your name</span>
+              <input required className="h-12 w-full rounded-lg border border-primary/15 bg-surface px-4 outline-none focus:border-secondary" placeholder="Your name" />
+            </label>
+            <label className="space-y-2">
+              <span className="text-sm font-semibold text-fg">Phone or email</span>
+              <input required className="h-12 w-full rounded-lg border border-primary/15 bg-surface px-4 outline-none focus:border-secondary" placeholder="How can we reach you?" />
+            </label>
+          </div>
+          <label className="mt-5 block space-y-2">
+            <span className="text-sm font-semibold text-fg">What do you need?</span>
+            <select className="h-12 w-full rounded-lg border border-primary/15 bg-surface px-4 outline-none focus:border-secondary">
+              <option>Pest control service</option>
+              <option>Cleaning products</option>
+              <option>Fragrances</option>
+              <option>General enquiry</option>
+            </select>
+          </label>
+          <label className="mt-5 block space-y-2">
+            <span className="text-sm font-semibold text-fg">Message</span>
+            <textarea required rows={5} className="w-full rounded-lg border border-primary/15 bg-surface px-4 py-3 outline-none focus:border-secondary" placeholder="Tell us what you need help with." />
+          </label>
+          <button className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 font-semibold text-white transition-colors hover:bg-accent">
+            <MessageCircle className="h-5 w-5" />
+            Send via WhatsApp
+          </button>
+        </form>
+      </section>
+    </div>
+  );
 }

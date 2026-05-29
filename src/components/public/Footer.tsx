@@ -1,158 +1,79 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Facebook, Instagram, LockKeyhole, Mail, MapPin, Phone } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { Instagram, Facebook, Twitter, MapPin, Mail, Phone, LockKeyhole } from 'lucide-react';
+
 export function Footer() {
   const { settings } = useStore();
+
   return (
-    <footer className="bg-surface border-t border-black/5 dark:border-white/5 pt-20 pb-10">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand */}
-          <div className="space-y-6">
-            <Link
-              to="/"
-              className="text-3xl font-serif text-fg tracking-wide block">
-              
-              {settings.storeName}
-            </Link>
-            <p className="text-muted leading-relaxed">
-              Premium quality products curated for the modern lifestyle. Elevate
-              your everyday with our carefully selected collections.
+    <footer className="border-t border-primary/10 bg-surface">
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
+          <div>
+            <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="h-14 w-auto" />
+            <p className="mt-5 max-w-sm leading-7 text-muted">
+              Professional pest control, cleaning products and fragrances for homes, businesses and facility teams.
             </p>
-            <div className="flex items-center gap-4">
-              {settings.socialLinks?.instagram &&
-              <a
-                href={settings.socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-muted hover:bg-accent hover:text-black transition-colors">
-                
-                  <Instagram className="w-5 h-5" />
+            <div className="mt-6 flex gap-3">
+              {settings.socialLinks?.facebook && (
+                <a href={settings.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="rounded-full bg-white p-3 text-primary hover:text-accent">
+                  <Facebook className="h-5 w-5" />
                 </a>
-              }
-              {settings.socialLinks?.facebook &&
-              <a
-                href={settings.socialLinks.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-muted hover:bg-accent hover:text-black transition-colors">
-                
-                  <Facebook className="w-5 h-5" />
+              )}
+              {settings.socialLinks?.instagram && (
+                <a href={settings.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="rounded-full bg-white p-3 text-primary hover:text-accent">
+                  <Instagram className="h-5 w-5" />
                 </a>
-              }
-              {settings.socialLinks?.twitter &&
-              <a
-                href={settings.socialLinks.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-muted hover:bg-accent hover:text-black transition-colors">
-                
-                  <Twitter className="w-5 h-5" />
-                </a>
-              }
+              )}
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
-            <h4 className="text-fg font-medium mb-6">Quick Links</h4>
-            <ul className="space-y-4">
-              <li>
-                <Link
-                  to="/shop"
-                  className="text-muted hover:text-accent transition-colors">
-                  
-                  Shop All
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/categories"
-                  className="text-muted hover:text-accent transition-colors">
-                  
-                  Categories
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/contact"
-                  className="text-muted hover:text-accent transition-colors">
-                  
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/cart"
-                  className="text-muted hover:text-accent transition-colors">
-                  
-                  View Cart
-                </Link>
-              </li>
-            </ul>
+            <h4 className="font-bold text-fg">Services</h4>
+            <div className="mt-5 flex flex-col gap-3 text-muted">
+              <Link to="/services/pest-control" className="hover:text-secondary">Pest Control</Link>
+              <Link to="/services/cleaning-products" className="hover:text-secondary">Cleaning Products</Link>
+              <Link to="/services/fragrances" className="hover:text-secondary">Fragrances</Link>
+              <Link to="/shop" className="hover:text-secondary">Product Catalog</Link>
+            </div>
           </div>
 
-          {/* Contact */}
           <div>
-            <h4 className="text-fg font-medium mb-6">Contact Us</h4>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-muted">
-                <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-muted" />
-                <span>{settings.address}</span>
-              </li>
-              <li className="flex items-center gap-3 text-muted">
-                <Mail className="w-5 h-5 shrink-0 text-muted" />
-                <a
-                  href={`mailto:${settings.email}`}
-                  className="hover:text-accent transition-colors">
-                  
-                  {settings.email}
-                </a>
-              </li>
-              <li className="flex items-center gap-3 text-muted">
-                <Phone className="w-5 h-5 shrink-0 text-muted" />
-                <a
-                  href={`tel:${settings.phoneNumber}`}
-                  className="hover:text-accent transition-colors">
-                  
-                  {settings.phoneNumber}
-                </a>
-              </li>
-            </ul>
+            <h4 className="font-bold text-fg">Company</h4>
+            <div className="mt-5 flex flex-col gap-3 text-muted">
+              <Link to="/" className="hover:text-secondary">Home</Link>
+              <Link to="/categories" className="hover:text-secondary">Categories</Link>
+              <Link to="/contact" className="hover:text-secondary">Contact</Link>
+              <Link to="/cart" className="hover:text-secondary">Cart</Link>
+            </div>
           </div>
 
-          {/* Delivery Info */}
           <div>
-            <h4 className="text-fg font-medium mb-6">Delivery</h4>
-            <p className="text-muted leading-relaxed mb-6">
-              {settings.deliveryInfo}
-            </p>
+            <h4 className="font-bold text-fg">Contact</h4>
+            <div className="mt-5 space-y-4 text-muted">
+              <p className="flex gap-3"><MapPin className="h-5 w-5 shrink-0 text-secondary" /> {settings.address}</p>
+              <a href={`mailto:${settings.email}`} className="flex gap-3 hover:text-secondary"><Mail className="h-5 w-5 shrink-0 text-secondary" /> {settings.email}</a>
+              <a href={`tel:${settings.phoneNumber}`} className="flex gap-3 hover:text-secondary"><Phone className="h-5 w-5 shrink-0 text-secondary" /> {settings.phoneNumber}</a>
+            </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-black/10 dark:border-white/10 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-muted text-sm">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-primary/10 pt-6 text-sm text-muted md:flex-row">
+          <div className="flex items-center gap-2">
             <p>{settings.footerText}</p>
             <Link
               to="/admin/login"
               aria-label="Admin portal"
               title="Admin portal"
-              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-muted/25 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-muted/25 transition-colors hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
             >
               <LockKeyhole className="h-3.5 w-3.5" />
             </Link>
           </div>
-          <div className="flex items-center gap-4 text-sm text-muted">
-            <Link to="#" className="hover:text-fg transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="#" className="hover:text-fg transition-colors">
-              Terms of Service
-            </Link>
-          </div>
+          <p>Built for simple, reliable service enquiries.</p>
         </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 }

@@ -10,25 +10,17 @@ export default {
       colors: {
         background: 'var(--bg)',
         surface: 'var(--surface)',
-        accent: '#FFB547',
+        primary: '#005C99',
+        secondary: '#0F7ACB',
+        lightblue: '#59D0F9',
+        accent: '#7AC943',
         fg: 'var(--fg)',
         muted: 'var(--fg-muted)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'serif'],
-      },
-      animation: {
-        'blob': 'blob 8s infinite alternate ease-in-out',
-        'blob-slow': 'blob 12s 3s infinite alternate ease-in-out',
-      },
-      keyframes: {
-        blob: {
-          '0%':   { transform: 'translate(0px,   0px)   scale(1)'    },
-          '33%':  { transform: 'translate(25px,  -35px) scale(1.06)' },
-          '66%':  { transform: 'translate(-20px,  20px) scale(0.96)' },
-          '100%': { transform: 'translate(0px,   0px)   scale(1)'    },
-        },
+        display: ['Poppins', 'Inter', 'sans-serif'],
+        serif: ['Poppins', 'Inter', 'sans-serif'],
       },
     },
   },
