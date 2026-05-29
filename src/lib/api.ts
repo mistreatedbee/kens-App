@@ -1,4 +1,4 @@
-import type { Product, Category, Order, StoreSettings } from '../context/StoreContext';
+import type { Product, Category, Order, StoreSettings, Customer } from '../context/StoreContext';
 
 const BASE = import.meta.env.VITE_API_URL ?? '';
 const TOKEN_KEY = 'store_admin_token';
@@ -12,6 +12,11 @@ export interface AdminUser {
 export interface LoginResponse {
   token: string;
   admin: AdminUser;
+}
+
+export interface CustomerDetailResponse {
+  customer: Customer;
+  orders: Order[];
 }
 
 export function getAdminToken() {
@@ -133,6 +138,16 @@ export const api = {
   placeOrder: (data: unknown) => request<Order>('POST', '/api/orders', data),
   updateOrderStatus: (id: string, status: string) =>
     request<Order>('PATCH', `/api/orders/${id}/status`, { status }, true),
+  deleteOrder: (id: string) =>
+    request<{ success: boolean }>('DELETE', `/api/orders/${id}`, undefined, true),
+
+  getCustomers: () => request<Customer[]>('GET', '/api/customers', undefined, true),
+  getCustomer: (id: string) =>
+    request<{ customer: Record<string, unknown>; orders: Record<string, unknown>[] }>('GET', `/api/customers/${id}`, undefined, true)
+      .then((data) => ({
+        customer: normalize<Customer>(data.customer),
+        orders: data.orders.map((order) => normalize<Order>(order)),
+      })),
 
   getSettings: async (): Promise<StoreSettings> => {
     const raw = await request<Record<string, unknown>>('GET', '/api/settings');

@@ -27,7 +27,11 @@ export function AdminLayout() {
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-primary/10 z-40 flex items-center justify-between px-4">
         <h2 className="text-lg font-bold text-primary flex items-center gap-2">
-          <Store className="w-4 h-4 text-accent" />
+          {settings.logo ? (
+            <img src={settings.logo} alt={settings.storeName} className="h-8 w-8 rounded-lg object-contain" />
+          ) : (
+            <Store className="w-4 h-4 text-accent" />
+          )}
           {settings.storeName}
         </h2>
         <button

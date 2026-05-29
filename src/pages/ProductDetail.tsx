@@ -55,13 +55,16 @@ export function ProductDetail() {
   ).
   slice(0, 4);
   const isOutOfStock = product.stock <= 0;
+  const isUnavailable = isOutOfStock || Boolean(product.isComingSoon);
   const handleAddToCart = () => {
+    if (isUnavailable) return;
     addToCart(product, quantity);
     toast.success(
       `Added ${quantity} ${quantity === 1 ? 'item' : 'items'} to cart`
     );
   };
   const handleBuyNow = () => {
+    if (isUnavailable) return;
     addToCart(product, quantity);
     navigate('/checkout');
   };
@@ -104,6 +107,11 @@ export function ProductDetail() {
             {product.discountPrice && !isOutOfStock &&
             <div className="absolute top-6 left-6 px-4 py-2 bg-white/90 text-black text-sm font-medium rounded-full backdrop-blur-md">
                 Sale
+              </div>
+            }
+            {product.isComingSoon &&
+            <div className="absolute top-6 left-6 px-4 py-2 bg-secondary/90 text-white text-sm font-medium rounded-full backdrop-blur-md">
+                Coming Soon
               </div>
             }
           </div>
@@ -171,7 +179,11 @@ export function ProductDetail() {
 
           <div className="space-y-6 mb-10">
             <div className="flex items-center gap-2 text-sm">
-              {isOutOfStock ?
+              {product.isComingSoon ?
+              <span className="text-secondary flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-secondary" /> Coming soon
+                </span> :
+              isOutOfStock ?
               <span className="text-red-400 flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-red-400" /> Out of
                   stock
@@ -184,7 +196,7 @@ export function ProductDetail() {
               }
             </div>
 
-            {!isOutOfStock &&
+            {!isUnavailable &&
             <div className="flex items-center gap-4">
                 <span className="text-muted font-medium">Quantity</span>
                 <div className="flex items-center bg-surface border border-black/10 dark:border-white/10 rounded-full p-1">
@@ -213,11 +225,11 @@ export function ProductDetail() {
           <div className="flex flex-col sm:flex-row gap-4 mt-auto">
             <button
               onClick={handleAddToCart}
-              disabled={isOutOfStock}
+              disabled={isUnavailable}
               className="flex-1 py-4 bg-accent text-black font-semibold rounded-full hover:bg-white transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-accent">
               
               <ShoppingCart className="w-5 h-5" />
-              {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+              {product.isComingSoon ? 'Coming Soon' : isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
             </button>
 
             <a
@@ -231,7 +243,7 @@ export function ProductDetail() {
             </a>
             <button
               onClick={handleBuyNow}
-              disabled={isOutOfStock}
+              disabled={isUnavailable}
               className="flex-1 py-4 bg-black text-white font-semibold rounded-full hover:bg-accent hover:text-black transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
               Buy Now
             </button>

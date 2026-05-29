@@ -1,50 +1,33 @@
-import React, { useMemo } from 'react';
-import { Mail, Phone, UserRound } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Mail, MessageCircle, Phone, UserRound } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatCurrency, formatDate } from '../../lib/format';
+import { SearchBar } from '../../components/shared/SearchBar';
 
 export function AdminCustomers() {
-  const { orders, settings } = useStore();
+  const { customers, settings } = useStore();
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const customers = useMemo(() => {
-    const map = new Map<string, {
-      name: string;
-      phone: string;
-      email?: string;
-      orders: number;
-      total: number;
-      lastOrder: string;
-    }>();
+  const filteredCustomers = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return customers.filter((customer) =>
+      customer.name.toLowerCase().includes(query) ||
+      customer.phone?.toLowerCase().includes(query) ||
+      customer.email?.toLowerCase().includes(query)
+    );
+  }, [customers, searchQuery]);
 
-    orders.forEach((order) => {
-      const key = order.customerEmail || order.customerPhone || order.customerName;
-      const existing = map.get(key);
-      if (existing) {
-        existing.orders += 1;
-        existing.total += order.total;
-        if (new Date(order.createdAt) > new Date(existing.lastOrder)) {
-          existing.lastOrder = order.createdAt;
-        }
-      } else {
-        map.set(key, {
-          name: order.customerName,
-          phone: order.customerPhone,
-          email: order.customerEmail,
-          orders: 1,
-          total: order.total,
-          lastOrder: order.createdAt,
-        });
-      }
-    });
-
-    return [...map.values()].sort((a, b) => new Date(b.lastOrder).getTime() - new Date(a.lastOrder).getTime());
-  }, [orders]);
+  const contactUrl = (phone?: string, name?: string) => {
+    const clean = (phone || '').replace(/\D/g, '');
+    return `https://wa.me/${clean}?text=${encodeURIComponent(`Hi ${name || ''}, this is ${settings.storeName}.`)}`;
+  };
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-fg">Customers</h1>
-        <p className="text-muted">Read-only customer list generated from order details.</p>
+        <p className="text-muted">Customer records created automatically from orders.</p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-3">
@@ -53,19 +36,22 @@ export function AdminCustomers() {
           <p className="mt-2 text-3xl font-bold text-primary">{customers.length}</p>
         </div>
         <div className="rounded-xl bg-white p-5 shadow-sm border border-primary/10">
-          <p className="text-sm text-muted">Total order value</p>
+          <p className="text-sm text-muted">Total amount spent</p>
           <p className="mt-2 text-3xl font-bold text-primary">
-            {formatCurrency(customers.reduce((sum, item) => sum + item.total, 0), settings.currency)}
+            {formatCurrency(customers.reduce((sum, item) => sum + item.totalSpent, 0), settings.currency)}
           </p>
         </div>
         <div className="rounded-xl bg-white p-5 shadow-sm border border-primary/10">
           <p className="text-sm text-muted">Repeat customers</p>
-          <p className="mt-2 text-3xl font-bold text-primary">{customers.filter((item) => item.orders > 1).length}</p>
+          <p className="mt-2 text-3xl font-bold text-primary">{customers.filter((item) => item.orderCount > 1).length}</p>
         </div>
       </div>
 
       <div className="rounded-xl bg-white p-6 shadow-sm border border-primary/10">
-        {customers.length > 0 ? (
+        <div className="mb-6">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search customers..." />
+        </div>
+        {filteredCustomers.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="border-b border-primary/10 text-muted">
@@ -73,30 +59,43 @@ export function AdminCustomers() {
                   <th className="pb-3 font-semibold">Customer</th>
                   <th className="pb-3 font-semibold">Contact</th>
                   <th className="pb-3 font-semibold">Orders</th>
-                  <th className="pb-3 font-semibold">Total</th>
+                  <th className="pb-3 font-semibold">Total spent</th>
                   <th className="pb-3 font-semibold">Last order</th>
+                  <th className="pb-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-primary/10">
-                {customers.map((customer) => (
-                  <tr key={`${customer.phone}-${customer.email}`} className="text-fg">
+                {filteredCustomers.map((customer) => (
+                  <tr key={customer.id} className="text-fg">
                     <td className="py-4">
-                      <div className="flex items-center gap-3">
+                      <Link to={`/admin/customers/${customer.id}`} className="flex items-center gap-3 hover:text-primary">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lightblue/20 text-primary">
                           <UserRound className="h-5 w-5" />
                         </div>
                         <span className="font-semibold">{customer.name}</span>
-                      </div>
+                      </Link>
                     </td>
                     <td className="py-4 text-muted">
                       <div className="space-y-1">
-                        <p className="flex items-center gap-2"><Phone className="h-4 w-4" /> {customer.phone}</p>
+                        {customer.phone && <p className="flex items-center gap-2"><Phone className="h-4 w-4" /> {customer.phone}</p>}
                         {customer.email && <p className="flex items-center gap-2"><Mail className="h-4 w-4" /> {customer.email}</p>}
                       </div>
                     </td>
-                    <td className="py-4">{customer.orders}</td>
-                    <td className="py-4 font-semibold text-primary">{formatCurrency(customer.total, settings.currency)}</td>
-                    <td className="py-4 text-muted">{formatDate(customer.lastOrder)}</td>
+                    <td className="py-4">{customer.orderCount}</td>
+                    <td className="py-4 font-semibold text-primary">{formatCurrency(customer.totalSpent, settings.currency)}</td>
+                    <td className="py-4 text-muted">{customer.lastOrderDate ? formatDate(customer.lastOrderDate) : '-'}</td>
+                    <td className="py-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        <Link to={`/admin/customers/${customer.id}`} className="rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary hover:text-white">
+                          Details
+                        </Link>
+                        {customer.phone && (
+                          <a href={contactUrl(customer.phone, customer.name)} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent hover:bg-accent hover:text-white">
+                            <MessageCircle className="inline h-3.5 w-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -105,7 +104,7 @@ export function AdminCustomers() {
         ) : (
           <div className="py-16 text-center">
             <UserRound className="mx-auto h-12 w-12 text-primary/30" />
-            <h2 className="mt-4 text-xl font-bold text-fg">No customers yet</h2>
+            <h2 className="mt-4 text-xl font-bold text-fg">No customers found</h2>
             <p className="mt-2 text-muted">Customers will appear here once orders are placed.</p>
           </div>
         )}

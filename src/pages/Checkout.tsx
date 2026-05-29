@@ -34,7 +34,7 @@ export function Checkout() {
       [e.target.name]: e.target.value
     }));
   };
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
@@ -60,12 +60,12 @@ export function Checkout() {
         total: subtotal,
         status: 'New' as const
       };
-      addOrder(newOrder);
+      const savedOrder = await addOrder(newOrder);
       clearCart();
       // Navigate to confirmation page
-      navigate(`/order-confirmation/${orderNumber}`);
+      navigate(`/order-confirmation/${savedOrder.orderNumber}`);
     } catch (error) {
-      toast.error('Failed to place order. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
       setIsSubmitting(false);
     }
   };

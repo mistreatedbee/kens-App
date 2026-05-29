@@ -63,7 +63,11 @@ export function AdminSidebar() {
     <aside className="w-64 bg-white border-r border-primary/10 h-screen sticky top-0 flex flex-col hidden md:flex">
       <div className="p-6 border-b border-primary/10">
         <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-          <Store className="w-5 h-5 text-accent" />
+          {settings.logo ? (
+            <img src={settings.logo} alt={settings.storeName} className="h-9 w-9 rounded-lg object-contain bg-white" />
+          ) : (
+            <Store className="w-5 h-5 text-accent" />
+          )}
           {settings.storeName}
         </h2>
         <p className="text-xs text-muted mt-1">Business Admin</p>

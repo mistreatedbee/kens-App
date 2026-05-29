@@ -14,6 +14,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const { settings } = useStore();
   const { addToCart } = useCart();
   const isOutOfStock = product.stock <= 0;
+  const isUnavailable = isOutOfStock || product.isComingSoon;
 
   const handleAddToCart = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -34,6 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {product.isComingSoon && <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-white">Coming soon</span>}
           {isOutOfStock && <span className="rounded-full bg-red-600 px-3 py-1 text-xs font-semibold text-white">Out of stock</span>}
           {!isOutOfStock && product.isFeatured && <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">Featured</span>}
           {product.discountPrice && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">Value offer</span>}
@@ -64,7 +66,7 @@ export function ProductCard({ product }: ProductCardProps) {
               </span>
             )}
           </div>
-          {!isOutOfStock ? (
+          {!isUnavailable ? (
             <button
               onClick={handleAddToCart}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-accent"

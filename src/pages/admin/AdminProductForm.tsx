@@ -20,9 +20,11 @@ export function AdminProductForm() {
     categoryId: '',
     images: [] as string[],
     stock: '10',
+    tags: '',
     isActive: true,
     isFeatured: false,
-    isTrending: false
+    isTrending: false,
+    isComingSoon: false
   });
   useEffect(() => {
     if (isEditing && existingProduct) {
@@ -34,9 +36,11 @@ export function AdminProductForm() {
         categoryId: existingProduct.categoryId,
         images: existingProduct.images,
         stock: existingProduct.stock.toString(),
+        tags: existingProduct.tags?.join(', ') || '',
         isActive: existingProduct.isActive,
         isFeatured: existingProduct.isFeatured,
-        isTrending: existingProduct.isTrending
+        isTrending: existingProduct.isTrending,
+        isComingSoon: Boolean(existingProduct.isComingSoon)
       });
     }
   }, [isEditing, existingProduct]);
@@ -67,7 +71,7 @@ export function AdminProductForm() {
       }));
     }
   };
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.categoryId) {
       toast.error('Please select a category');
@@ -96,18 +100,24 @@ export function AdminProductForm() {
       categoryName: category.name,
       images: imageArray,
       stock: parseInt(formData.stock, 10),
+      tags: formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean),
       isActive: formData.isActive,
       isFeatured: formData.isFeatured,
-      isTrending: formData.isTrending
+      isTrending: formData.isTrending,
+      isComingSoon: formData.isComingSoon
     };
-    if (isEditing && id) {
-      updateProduct(id, productData);
-      toast.success('Product updated successfully');
-    } else {
-      addProduct(productData);
-      toast.success('Product created successfully');
+    try {
+      if (isEditing && id) {
+        await updateProduct(id, productData);
+        toast.success('Product updated successfully');
+      } else {
+        await addProduct(productData);
+        toast.success('Product created successfully');
+      }
+      navigate('/admin/products');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to save product');
     }
-    navigate('/admin/products');
   };
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
@@ -119,7 +129,7 @@ export function AdminProductForm() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-3xl font-serif text-fg">
+          <h1 className="text-3xl font-bold text-fg">
             {isEditing ? 'Edit Product' : 'Add New Product'}
           </h1>
           <p className="text-muted">
@@ -149,6 +159,17 @@ export function AdminProductForm() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
                 
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-muted">Tags (comma separated)</label>
+                <input
+                  type="text"
+                  name="tags"
+                  value={formData.tags}
+                  onChange={handleChange}
+                  placeholder="cleaning, fragrance, service"
+                  className="w-full px-4 py-3 bg-background border border-black/10 dark:border-white/10 rounded-xl text-fg focus:outline-none focus:border-accent transition-colors" />
               </div>
 
               <div className="space-y-2">
@@ -278,6 +299,23 @@ export function AdminProductForm() {
                   onChange={handleChange}
                   className="w-5 h-5 rounded border-black/10 dark:border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
                 
+              </label>
+
+              <label className="flex items-center justify-between cursor-pointer group">
+                <div>
+                  <div className="text-fg font-medium group-hover:text-accent transition-colors">
+                    Coming Soon
+                  </div>
+                  <div className="text-xs text-muted">
+                    Show in coming soon section
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  name="isComingSoon"
+                  checked={formData.isComingSoon}
+                  onChange={handleChange}
+                  className="w-5 h-5 rounded border-black/10 dark:border-white/10 bg-background text-accent focus:ring-accent focus:ring-offset-background" />
               </label>
 
               <label className="flex items-center justify-between cursor-pointer group">

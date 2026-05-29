@@ -5,13 +5,16 @@ import {
   ShoppingCart,
   Tags,
   AlertCircle,
-  ArrowRight } from
+  ArrowRight,
+  Users,
+  Star,
+  TrendingUp } from
 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { formatCurrency, formatDate } from '../../lib/format';
 import { StatusBadge } from '../../components/shared/StatusBadge';
 export function AdminDashboard() {
-  const { products, categories, orders, settings } = useStore();
+  const { products, categories, orders, customers, settings } = useStore();
   const totalProducts = products.length;
   const totalCategories = categories.length;
   const totalOrders = orders.length;
@@ -20,6 +23,8 @@ export function AdminDashboard() {
   ).length;
   const completedOrders = orders.filter((o) => o.status === 'Completed').length;
   const lowStockProducts = products.filter((p) => p.stock <= 5);
+  const featuredProducts = products.filter((p) => p.isFeatured).length;
+  const trendingProducts = products.filter((p) => p.isTrending).length;
   const recentOrders = [...orders].
   sort(
     (a, b) =>
@@ -56,6 +61,13 @@ export function AdminDashboard() {
     bg: 'bg-secondary/10'
   },
   {
+    name: 'Customers',
+    value: customers.length,
+    icon: Users,
+    color: 'text-primary',
+    bg: 'bg-lightblue/20'
+  },
+  {
     name: 'Completed',
     value: completedOrders,
     icon: ShoppingCart,
@@ -87,6 +99,11 @@ export function AdminDashboard() {
           Manage Categories
         </Link>
         <Link
+          to="/admin/settings"
+          className="px-4 py-2 bg-white border border-primary/10 text-fg font-medium rounded-lg hover:bg-lightblue/15 transition-colors whitespace-nowrap">
+          Edit Store Settings
+        </Link>
+        <Link
           to="/admin/orders"
           className="px-4 py-2 bg-white border border-primary/10 text-fg font-medium rounded-lg hover:bg-lightblue/15 transition-colors whitespace-nowrap">
           
@@ -95,7 +112,7 @@ export function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-6">
         {stats.map((stat, i) =>
         <div key={i} className="bg-white border border-primary/10 shadow-sm p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
@@ -213,6 +230,20 @@ export function AdminDashboard() {
               </div>
             }
           </div>
+        </div>
+      </div>
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="bg-white border border-primary/10 shadow-sm rounded-2xl p-6">
+          <h2 className="text-xl font-medium text-fg mb-4 flex items-center gap-2">
+            <Star className="w-5 h-5 text-secondary" /> Featured Products
+          </h2>
+          <p className="text-4xl font-bold text-primary">{featuredProducts}</p>
+        </div>
+        <div className="bg-white border border-primary/10 shadow-sm rounded-2xl p-6">
+          <h2 className="text-xl font-medium text-fg mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-accent" /> Trending Products
+          </h2>
+          <p className="text-4xl font-bold text-primary">{trendingProducts}</p>
         </div>
       </div>
     </div>);

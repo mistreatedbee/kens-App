@@ -29,6 +29,7 @@ import { AdminOrders } from './pages/admin/AdminOrders';
 import { AdminOrderDetail } from './pages/admin/AdminOrderDetail';
 import { AdminSettings } from './pages/admin/AdminSettings';
 import { AdminCustomers } from './pages/admin/AdminCustomers';
+import { AdminCustomerDetail } from './pages/admin/AdminCustomerDetail';
 import { AdminAnalytics } from './pages/admin/AdminAnalytics';
 export function App() {
   return (
@@ -73,6 +74,7 @@ export function App() {
                 <Route path="orders" element={<AdminOrders />} />
                 <Route path="orders/:id" element={<AdminOrderDetail />} />
                 <Route path="customers" element={<AdminCustomers />} />
+                <Route path="customers/:id" element={<AdminCustomerDetail />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>

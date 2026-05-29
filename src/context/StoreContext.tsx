@@ -14,9 +14,11 @@ export interface Product {
   categoryName: string;
   images: string[];
   stock: number;
+  tags?: string[];
   isActive: boolean;
   isFeatured: boolean;
   isTrending: boolean;
+  isComingSoon?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -27,6 +29,8 @@ export interface Category {
   slug: string;
   description?: string;
   image?: string;
+  icon?: string;
+  sortOrder?: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -65,20 +69,44 @@ export interface Order {
   updatedAt: string;
 }
 
+export interface Customer {
+  id: string;
+  name: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  orderCount: number;
+  totalSpent: number;
+  lastOrderDate?: string;
+  orderIds: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface StoreSettings {
   storeName: string;
   logo: string;
+  tagline?: string;
+  description?: string;
+  contactPerson?: string;
   whatsappNumber: string;
   phoneNumber: string;
   email: string;
+  websiteUrl?: string;
   address: string;
+  operatingHours?: string;
   socialLinks: {
     instagram?: string;
     facebook?: string;
     twitter?: string;
+    linkedin?: string;
+    tiktok?: string;
   };
   deliveryInfo: string;
+  collectionInfo?: string;
   footerText: string;
+  aboutInfo?: string;
+  additionalInfo?: string;
   currency: string;
 }
 
@@ -86,28 +114,42 @@ interface StoreContextType {
   products: Product[];
   categories: Category[];
   orders: Order[];
+  customers: Customer[];
   settings: StoreSettings;
   loading: boolean;
-  addProduct: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateProduct: (id: string, product: Partial<Product>) => void;
-  deleteProduct: (id: string) => void;
-  addCategory: (category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateCategory: (id: string, category: Partial<Category>) => void;
-  deleteCategory: (id: string) => void;
-  addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateOrderStatus: (id: string, status: Order['status']) => void;
-  updateSettings: (settings: Partial<StoreSettings>) => void;
+  addProduct: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateProduct: (id: string, product: Partial<Product>) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
+  addCategory: (category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  updateCategory: (id: string, category: Partial<Category>) => Promise<void>;
+  deleteCategory: (id: string) => Promise<void>;
+  addOrder: (order: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Order>;
+  updateOrderStatus: (id: string, status: Order['status']) => Promise<void>;
+  deleteOrder: (id: string) => Promise<void>;
+  updateSettings: (settings: Partial<StoreSettings>) => Promise<void>;
   refreshOrders: () => Promise<void>;
+  refreshCustomers: () => Promise<void>;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
+
+function sortCategories(categories: Category[]) {
+  return [...categories].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+}
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [settings, setSettings] = useState<StoreSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
+
+  const refreshProducts = useCallback(async () => setProducts(await api.getProducts()), []);
+  const refreshCategories = useCallback(async () => setCategories(sortCategories(await api.getCategories())), []);
+  const refreshSettings = useCallback(async () => setSettings(await api.getSettings()), []);
+  const refreshOrders = useCallback(async () => setOrders(await api.getOrders()), []);
+  const refreshCustomers = useCallback(async () => setCustomers(await api.getCustomers()), []);
 
   useEffect(() => {
     Promise.all([
@@ -115,118 +157,85 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       api.getCategories().catch(() => null),
       api.getSettings().catch(() => null),
       api.getOrders().catch(() => null),
-    ]).then(([prods, cats, setts, ords]) => {
+      api.getCustomers().catch(() => null),
+    ]).then(([prods, cats, setts, ords, custs]) => {
       setProducts(prods ?? seedProducts);
-      setCategories(cats ?? seedCategories);
+      setCategories(sortCategories(cats ?? seedCategories));
       if (setts) setSettings(setts);
       if (ords) setOrders(ords);
+      if (custs) setCustomers(custs);
     }).finally(() => setLoading(false));
   }, []);
 
-  const addProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const tempId = `temp-${Date.now()}`;
-    const now = new Date().toISOString();
-    const optimistic: Product = { ...productData, id: tempId, createdAt: now, updatedAt: now };
-    setProducts((prev) => [...prev, optimistic]);
+  useEffect(() => {
+    const base = import.meta.env.VITE_API_URL ?? '';
+    const source = new EventSource(`${base}/api/events`);
+    source.addEventListener('settings', () => refreshSettings().catch(() => undefined));
+    source.addEventListener('products', () => refreshProducts().catch(() => undefined));
+    source.addEventListener('categories', () => refreshCategories().catch(() => undefined));
+    source.addEventListener('orders', () => refreshOrders().catch(() => undefined));
+    source.addEventListener('customers', () => refreshCustomers().catch(() => undefined));
+    source.onerror = () => undefined;
+    return () => source.close();
+  }, [refreshCategories, refreshCustomers, refreshOrders, refreshProducts, refreshSettings]);
 
-    api.createProduct(productData)
-      .then((saved) => setProducts((prev) => prev.map((p) => p.id === tempId ? saved : p)))
-      .catch(() => {
-        setProducts((prev) => prev.filter((p) => p.id !== tempId));
-        toast.error('Failed to add product');
-      });
+  const addProduct = async (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const saved = await api.createProduct(productData);
+    setProducts((prev) => [saved, ...prev]);
   };
 
-  const updateProduct = (id: string, data: Partial<Product>) => {
-    setProducts((prev) =>
-      prev.map((p) => p.id === id ? { ...p, ...data, updatedAt: new Date().toISOString() } : p)
-    );
-
-    api.updateProduct(id, data)
-      .then((saved) => setProducts((prev) => prev.map((p) => p.id === id ? saved : p)))
-      .catch(() => toast.error('Failed to update product'));
+  const updateProduct = async (id: string, data: Partial<Product>) => {
+    const saved = await api.updateProduct(id, data);
+    setProducts((prev) => prev.map((p) => p.id === id ? saved : p));
   };
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = async (id: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
-
-    api.deleteProduct(id)
-      .catch(() => toast.error('Failed to delete product'));
+    await api.deleteProduct(id);
   };
 
-  const addCategory = (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const tempId = `temp-${Date.now()}`;
-    const now = new Date().toISOString();
-    const optimistic: Category = { ...categoryData, id: tempId, createdAt: now, updatedAt: now };
-    setCategories((prev) => [...prev, optimistic]);
-
-    api.createCategory(categoryData)
-      .then((saved) => setCategories((prev) => prev.map((c) => c.id === tempId ? saved : c)))
-      .catch(() => {
-        setCategories((prev) => prev.filter((c) => c.id !== tempId));
-        toast.error('Failed to add category');
-      });
+  const addCategory = async (categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const saved = await api.createCategory(categoryData);
+    setCategories((prev) => sortCategories([saved, ...prev]));
   };
 
-  const updateCategory = (id: string, data: Partial<Category>) => {
-    setCategories((prev) =>
-      prev.map((c) => c.id === id ? { ...c, ...data, updatedAt: new Date().toISOString() } : c)
-    );
-
-    api.updateCategory(id, data)
-      .then((saved) => setCategories((prev) => prev.map((c) => c.id === id ? saved : c)))
-      .catch(() => toast.error('Failed to update category'));
+  const updateCategory = async (id: string, data: Partial<Category>) => {
+    const saved = await api.updateCategory(id, data);
+    setCategories((prev) => sortCategories(prev.map((c) => c.id === id ? saved : c)));
   };
 
-  const deleteCategory = (id: string) => {
+  const deleteCategory = async (id: string) => {
     setCategories((prev) => prev.filter((c) => c.id !== id));
-
-    api.deleteCategory(id)
-      .catch(() => toast.error('Failed to delete category'));
+    await api.deleteCategory(id);
   };
 
-  const addOrder = (orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const tempId = `temp-${Date.now()}`;
-    const now = new Date().toISOString();
-    const optimistic: Order = { ...orderData, id: tempId, createdAt: now, updatedAt: now };
-    setOrders((prev) => [optimistic, ...prev]);
-
-    api.placeOrder(orderData)
-      .then((saved) => setOrders((prev) => prev.map((o) => o.id === tempId ? saved : o)))
-      .catch(() => toast.error('Failed to save order — your order was received but may not have saved'));
+  const addOrder = async (orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const saved = await api.placeOrder(orderData);
+    setOrders((prev) => [saved, ...prev.filter((o) => o.id !== saved.id)]);
+    refreshCustomers().catch(() => undefined);
+    return saved;
   };
 
-  const updateOrderStatus = (id: string, status: Order['status']) => {
-    setOrders((prev) =>
-      prev.map((o) => o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o)
-    );
-
-    api.updateOrderStatus(id, status)
-      .then((saved) => setOrders((prev) => prev.map((o) => o.id === id ? saved : o)))
-      .catch(() => toast.error('Failed to update order status'));
+  const updateOrderStatus = async (id: string, status: Order['status']) => {
+    const saved = await api.updateOrderStatus(id, status);
+    setOrders((prev) => prev.map((o) => o.id === id ? saved : o));
   };
 
-  const updateSettings = (newSettings: Partial<StoreSettings>) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }));
-
-    api.updateSettings(newSettings)
-      .then((saved) => setSettings(saved))
-      .catch(() => toast.error('Failed to save settings'));
+  const deleteOrder = async (id: string) => {
+    setOrders((prev) => prev.filter((o) => o.id !== id));
+    await api.deleteOrder(id);
+    refreshCustomers().catch(() => undefined);
   };
 
-  const refreshOrders = useCallback(async () => {
-    try {
-      const freshOrders = await api.getOrders();
-      setOrders(freshOrders);
-    } catch {
-      setOrders([]);
-    }
-  }, []);
+  const updateSettings = async (newSettings: Partial<StoreSettings>) => {
+    const saved = await api.updateSettings(newSettings);
+    setSettings(saved);
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background text-muted flex items-center justify-center">
-        Loading store...
+        Loading Kenmok CC...
       </div>
     );
   }
@@ -237,6 +246,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         products,
         categories,
         orders,
+        customers,
         settings,
         loading,
         addProduct,
@@ -247,8 +257,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         deleteCategory,
         addOrder,
         updateOrderStatus,
+        deleteOrder,
         updateSettings,
         refreshOrders,
+        refreshCustomers,
       }}
     >
       {children}

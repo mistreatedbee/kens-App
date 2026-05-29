@@ -109,6 +109,9 @@ export function AdminProducts() {
                             {product.isTrending &&
                         <span className="text-purple-400">Trending</span>
                         }
+                            {product.isComingSoon &&
+                        <span className="text-secondary">Coming soon</span>
+                        }
                           </div>
                         </div>
                       </div>

@@ -37,6 +37,7 @@ export function OrderConfirmation() {
           scale: 1
         }}
         className="glass-card rounded-3xl p-8 md:p-12 text-center">
+        <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="mx-auto mb-6 h-14 w-auto" />
         
         <div className="w-20 h-20 mx-auto bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6">
           <CheckCircle className="w-10 h-10" />
@@ -48,6 +49,7 @@ export function OrderConfirmation() {
         <p className="text-muted text-lg mb-2">
           Thank you for your order, {order.customerName}.
         </p>
+        <p className="text-muted mb-4">{settings.phoneNumber} · {settings.email}</p>
         <p className="text-muted mb-8">
           Order Number:{' '}
           <span className="text-fg font-medium">{order.orderNumber}</span>

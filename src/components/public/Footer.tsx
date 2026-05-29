@@ -32,9 +32,9 @@ export function Footer() {
           <div>
             <h4 className="font-bold text-fg">Services</h4>
             <div className="mt-5 flex flex-col gap-3 text-muted">
-              <Link to="/services/pest-control" className="hover:text-secondary">Pest Control</Link>
               <Link to="/services/cleaning-products" className="hover:text-secondary">Cleaning Products</Link>
               <Link to="/services/fragrances" className="hover:text-secondary">Fragrances</Link>
+              <Link to="/services/pest-control" className="hover:text-secondary">Pest Control</Link>
               <Link to="/shop" className="hover:text-secondary">Product Catalog</Link>
             </div>
           </div>

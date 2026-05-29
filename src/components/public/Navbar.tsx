@@ -7,9 +7,9 @@ import { buildGeneralContactUrl } from '../../lib/whatsapp';
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Pest Control', path: '/services/pest-control' },
   { name: 'Cleaning Products', path: '/services/cleaning-products' },
   { name: 'Fragrances', path: '/services/fragrances' },
+  { name: 'Pest Control', path: '/services/pest-control' },
   { name: 'Shop', path: '/shop' },
   { name: 'Contact', path: '/contact' },
 ];
