@@ -212,12 +212,7 @@ export function Navbar() {
               </nav>
 
               <div className="mt-auto pt-8 border-t border-black/10 dark:border-white/10 flex items-center justify-between">
-                <Link
-                  to="/admin/login"
-                  className="text-sm text-muted hover:text-fg transition-colors"
-                >
-                  Admin Login
-                </Link>
+                <span className="text-sm text-muted">{settings.storeName}</span>
                 <button
                   onClick={toggle}
                   className="flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"

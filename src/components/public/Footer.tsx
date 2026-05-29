@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
-import { Instagram, Facebook, Twitter, MapPin, Mail, Phone } from 'lucide-react';
+import { Instagram, Facebook, Twitter, MapPin, Mail, Phone, LockKeyhole } from 'lucide-react';
 export function Footer() {
   const { settings } = useStore();
   return (
@@ -128,17 +128,21 @@ export function Footer() {
             <p className="text-muted leading-relaxed mb-6">
               {settings.deliveryInfo}
             </p>
-            <Link
-              to="/admin/login"
-              className="text-sm text-muted hover:text-muted transition-colors">
-              
-              Admin Portal
-            </Link>
           </div>
         </div>
 
         <div className="pt-8 border-t border-black/10 dark:border-white/10 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-muted text-sm">{settings.footerText}</p>
+          <div className="flex items-center gap-2 text-muted text-sm">
+            <p>{settings.footerText}</p>
+            <Link
+              to="/admin/login"
+              aria-label="Admin portal"
+              title="Admin portal"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-muted/25 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <LockKeyhole className="h-3.5 w-3.5" />
+            </Link>
+          </div>
           <div className="flex items-center gap-4 text-sm text-muted">
             <Link to="#" className="hover:text-fg transition-colors">
               Privacy Policy
