@@ -21,7 +21,7 @@ export function Footer() {
               your everyday with our carefully selected collections.
             </p>
             <div className="flex items-center gap-4">
-              {settings.socialLinks.instagram &&
+              {settings.socialLinks?.instagram &&
               <a
                 href={settings.socialLinks.instagram}
                 target="_blank"
@@ -31,7 +31,7 @@ export function Footer() {
                   <Instagram className="w-5 h-5" />
                 </a>
               }
-              {settings.socialLinks.facebook &&
+              {settings.socialLinks?.facebook &&
               <a
                 href={settings.socialLinks.facebook}
                 target="_blank"
@@ -41,7 +41,7 @@ export function Footer() {
                   <Facebook className="w-5 h-5" />
                 </a>
               }
-              {settings.socialLinks.twitter &&
+              {settings.socialLinks?.twitter &&
               <a
                 href={settings.socialLinks.twitter}
                 target="_blank"
