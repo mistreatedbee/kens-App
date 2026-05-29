@@ -66,6 +66,10 @@ function DivisionSection({ category, products }: { category: Category; products:
 
 export function Home() {
   const { products, categories, settings } = useStore();
+  const businessName =
+    settings.storeName?.trim().toLowerCase() === 'kens app'
+      ? 'Kenmok CC'
+      : settings.storeName || 'Kenmok CC';
   const activeProducts = products.filter((product) => product.isActive);
   const activeCategories = categories.filter((category) => category.isActive);
   const orderedDivisions = divisionOrder
@@ -95,7 +99,7 @@ export function Home() {
               {settings.tagline || 'Professional South African service company'}
             </div>
             <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-              {settings.storeName}: cleaning products, fragrances and pest control.
+              {businessName}: cleaning products, fragrances and pest control.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/88">
               {settings.description || settings.aboutInfo || 'Kenmok CC helps homes and businesses maintain cleaner, fresher and safer spaces.'}
@@ -111,7 +115,7 @@ export function Home() {
           </div>
           <div className="rounded-2xl bg-white p-6 shadow-2xl shadow-primary/30">
             <p className="text-sm font-bold uppercase tracking-wide text-secondary">Contact information</p>
-            <h2 className="mt-2 text-2xl font-bold text-fg">{settings.contactPerson || settings.storeName}</h2>
+            <h2 className="mt-2 text-2xl font-bold text-fg">{settings.contactPerson || businessName}</h2>
             <div className="mt-5 space-y-3 text-muted">
               <p>{settings.phoneNumber}</p>
               <p>{settings.email}</p>
@@ -137,7 +141,7 @@ export function Home() {
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-secondary">Why choose {settings.storeName}</p>
+            <p className="text-sm font-bold uppercase tracking-wide text-secondary">Why choose {businessName}</p>
             <h2 className="mt-3 text-3xl font-bold text-fg md:text-4xl">A professional partner for cleaner, safer spaces.</h2>
             <p className="mt-5 leading-8 text-muted">{settings.aboutInfo || 'Practical products, responsive communication and dependable service.'}</p>
           </div>
@@ -159,7 +163,7 @@ export function Home() {
           <p className="mx-auto mt-4 max-w-2xl leading-8 text-muted">{settings.additionalInfo || settings.deliveryInfo}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link to="/contact" className="rounded-full bg-primary px-7 py-4 font-semibold text-white transition-colors hover:bg-accent">
-              Contact {settings.storeName}
+              Contact {businessName}
             </Link>
             <a href={buildGeneralContactUrl(settings)} target="_blank" rel="noopener noreferrer" className="rounded-full border border-primary/20 px-7 py-4 font-semibold text-primary hover:border-accent hover:text-accent">
               WhatsApp now
