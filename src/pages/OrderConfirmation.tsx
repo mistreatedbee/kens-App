@@ -37,7 +37,7 @@ export function OrderConfirmation() {
           scale: 1
         }}
         className="glass-card rounded-3xl p-8 md:p-12 text-center">
-        <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="mx-auto mb-6 h-14 w-auto" />
+        <img src={settings.logo || '/logo.jpg'} alt={settings.storeName} className="mx-auto mb-6 h-14 w-auto" />
         
         <div className="w-20 h-20 mx-auto bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-6">
           <CheckCircle className="w-10 h-10" />

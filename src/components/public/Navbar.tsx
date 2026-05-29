@@ -52,7 +52,7 @@ export function Navbar() {
         </div>
         <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4">
           <Link to="/" className="flex items-center gap-3">
-            <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="h-12 w-auto" />
+            <img src={settings.logo || '/logo.jpg'} alt={settings.storeName} className="h-12 w-auto" />
           </Link>
 
           <nav className="hidden items-center justify-center gap-5 lg:flex">
@@ -113,7 +113,7 @@ export function Navbar() {
         <div className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm lg:hidden">
           <div className="ml-auto flex h-full w-4/5 max-w-sm flex-col bg-white p-6 shadow-2xl">
             <div className="mb-10 flex items-center justify-between">
-              <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="h-12 w-auto" />
+              <img src={settings.logo || '/logo.jpg'} alt={settings.storeName} className="h-12 w-auto" />
               <button onClick={() => setIsMobileMenuOpen(false)} className="rounded-full bg-surface p-2 text-primary">
                 <X className="h-5 w-5" />
               </button>

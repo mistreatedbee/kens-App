@@ -79,7 +79,7 @@ export function AdminSettings() {
               <ImageUpload
                 images={formData.logo ? [formData.logo] : []}
                 multiple={false}
-                onChange={(images) => setFormData((prev) => ({ ...prev, logo: images[0] || '/logo.svg' }))}
+                onChange={(images) => setFormData((prev) => ({ ...prev, logo: images[0] || '/logo.jpg' }))}
               />
             </div>
           </div>

@@ -74,7 +74,7 @@ export function Home() {
   const remainingDivisions = activeCategories.filter((category) => !divisionOrder.includes(category.slug));
   const divisions = [...orderedDivisions, ...remainingDivisions];
   const heroCategory = divisions[0];
-  const heroImage = heroCategory?.image || '/logo.svg';
+  const heroImage = heroCategory?.image || '/logo.jpg';
 
   const featured = activeProducts.filter((product) => product.isFeatured && !product.isComingSoon).slice(0, 6);
   const latest = [...activeProducts].filter((product) => !product.isComingSoon).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 6);

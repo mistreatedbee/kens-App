@@ -11,7 +11,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
           <div>
-            <img src={settings.logo || '/logo.svg'} alt={settings.storeName} className="h-14 w-auto" />
+            <img src={settings.logo || '/logo.jpg'} alt={settings.storeName} className="h-14 w-auto" />
             <p className="mt-5 max-w-sm leading-7 text-muted">
               Professional pest control, cleaning products and fragrances for homes, businesses and facility teams.
             </p>

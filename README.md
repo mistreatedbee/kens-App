@@ -1,6 +1,6 @@
-# Kens App
+# Kenmok CC
 
-E-commerce starter app branded as Kens App.
+Business website and admin dashboard for Kenmok CC.
 
 ## Getting Started
 

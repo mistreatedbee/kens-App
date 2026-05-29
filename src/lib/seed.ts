@@ -4,7 +4,7 @@ const now = new Date().toISOString();
 
 export const defaultSettings: StoreSettings = {
   storeName: 'Kenmok CC',
-  logo: '/logo.svg',
+  logo: '/logo.jpg',
   tagline: 'Clean spaces. Fresh impressions. Reliable service.',
   description:
     'Kenmok CC supplies cleaning products, fragrances and pest control services for homes and businesses.',
